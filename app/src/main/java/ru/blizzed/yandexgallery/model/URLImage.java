@@ -2,14 +2,14 @@ package ru.blizzed.yandexgallery.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
-
-import java.io.Serializable;
 
 import ru.blizzed.pixabaylib.model.PixabayImage;
 
 @Entity
-public class URLImage implements Serializable {
+public class URLImage implements Parcelable {
 
     @NonNull
     @PrimaryKey
@@ -36,12 +36,34 @@ public class URLImage implements Serializable {
     public URLImage() {
     }
 
+    public static final Parcelable.Creator<URLImage> CREATOR = new Parcelable.Creator<URLImage>() {
+
+        @Override
+        public URLImage createFromParcel(Parcel source) {
+            URLImage image = new URLImage();
+            String[] stringData = new String[4];
+            source.readStringArray(stringData);
+            image.setLargeURL(stringData[0]);
+            image.setMediumURL(stringData[1]);
+            image.setPreviewURL(stringData[2]);
+            image.setType(stringData[3]);
+
+            int[] intData = new int[2];
+            source.readIntArray(intData);
+            image.setMediumWidth(intData[0]);
+            image.setMediumHeight(intData[1]);
+            return image;
+        }
+
+        @Override
+        public URLImage[] newArray(int size) {
+            return new URLImage[size];
+        }
+    };
+
+    @NonNull
     public String getLargeURL() {
         return largeURL;
-    }
-
-    public void setLargeURL(String largeURL) {
-        this.largeURL = largeURL;
     }
 
     public String getMediumURL() {
@@ -91,4 +113,20 @@ public class URLImage implements Serializable {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    public void setLargeURL(@NonNull String largeURL) {
+        this.largeURL = largeURL;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{largeURL, mediumURL, previewURL, type});
+        dest.writeIntArray(new int[]{mediumWidth, mediumHeight});
+    }
+
 }
