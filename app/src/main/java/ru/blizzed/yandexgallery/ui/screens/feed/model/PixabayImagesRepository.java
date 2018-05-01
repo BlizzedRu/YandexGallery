@@ -6,12 +6,12 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import ru.blizzed.pixabaylib.Pixabay;
-import ru.blizzed.pixabaylib.model.PixabayImage;
 import ru.blizzed.pixabaylib.model.PixabayResult;
 import ru.blizzed.pixabaylib.params.CategoryParam;
 import ru.blizzed.pixabaylib.params.LangParam;
 import ru.blizzed.pixabaylib.params.Param;
 import ru.blizzed.pixabaylib.params.PixabayParams;
+import ru.blizzed.yandexgallery.model.URLImage;
 
 public class PixabayImagesRepository {
 
@@ -22,11 +22,11 @@ public class PixabayImagesRepository {
         Pixabay.initialize("8747111-af76d80e5e357356f8f5ae4b0", LangParam.Lang.RU);
     }
 
-    public Observable<List<PixabayImage>> getImagesByTag(CategoryParam.Category category, int offset) {
+    public Observable<List<URLImage>> getImagesByTag(CategoryParam.Category category, int offset) {
         return createRequest(Collections.singletonList(PixabayParams.CATEGORY.of(category)), offset);
     }
 
-    public Observable<List<PixabayImage>> getImages(int offset) {
+    public Observable<List<URLImage>> getImages(int offset) {
         return createRequest(Collections.emptyList(), offset);
     }
 
@@ -34,14 +34,15 @@ public class PixabayImagesRepository {
         return loadCount;
     }
 
-    private Observable<List<PixabayImage>> createRequest(List<Param> additionalParams, int offset) {
+    private Observable<List<URLImage>> createRequest(List<Param> additionalParams, int offset) {
         List<Param> params = new ArrayList<>(additionalParams);
         params.add(PixabayParams.PER_PAGE.of(loadCount));
         params.add(PixabayParams.PAGE.of(offset / loadCount + 1));
 
         return Pixabay.rxSearch()
                 .image(params.toArray(new Param[params.size()]))
-                .map(PixabayResult::getHits);
+                .map(PixabayResult::getHits)
+                .map(hits -> Observable.fromIterable(hits).map(URLImage::new).toList().blockingGet());
     }
 
 }

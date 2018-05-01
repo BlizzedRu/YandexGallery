@@ -10,24 +10,24 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import ru.blizzed.pixabaylib.model.PixabayImage;
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.model.URLImage;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 
-public class ImagesFeedViewAdapter extends ItemClickableRecyclerViewAdapter<PixabayImage> {
+public class ImagesFeedViewAdapter extends ItemClickableRecyclerViewAdapter<URLImage> {
 
     private int childWidth;
     private int childHeight;
     private int spanCount;
 
-    public ImagesFeedViewAdapter(int spanCount, List<PixabayImage> data, @NonNull OnItemClickListener<PixabayImage> listener) {
+    public ImagesFeedViewAdapter(int spanCount, List<URLImage> data, @NonNull OnItemClickListener<URLImage> listener) {
         super(data, listener);
         this.spanCount = spanCount;
     }
 
     @Override
     protected int getItemLayoutResId() {
-        return R.layout.image_preview;
+        return R.layout.item_image_preview;
     }
 
     @Override
@@ -47,12 +47,12 @@ public class ImagesFeedViewAdapter extends ItemClickableRecyclerViewAdapter<Pixa
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        PixabayImage image = getData().get(position);
+        URLImage image = getData().get(position);
 
         holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(childWidth, childHeight));
 
         Picasso.get()
-                .load(image.getWebformatURL())
+                .load(image.getMediumURL())
                 .placeholder(R.drawable.background_placeholder)
                 .into(((ViewHolder) holder).img);
 

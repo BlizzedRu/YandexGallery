@@ -35,7 +35,7 @@ public class FilesImageRepository {
             if (file.isDirectory()) handleDirectory(file, emitter);
             else if (isFileAnImage(file)) {
                 if (imagesFolder == null) imagesFolder = new ImagesFolder(directory);
-                imagesFolder.addImage(new Image(file));
+                imagesFolder.addImage(new FileImage(file));
             }
         }
         if (imagesFolder != null) emitter.onNext(imagesFolder);

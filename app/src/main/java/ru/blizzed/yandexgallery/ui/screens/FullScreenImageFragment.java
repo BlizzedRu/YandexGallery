@@ -11,16 +11,16 @@ import android.widget.Toolbar;
 
 import com.squareup.picasso.Picasso;
 
-import ru.blizzed.pixabaylib.model.PixabayImage;
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.model.URLImage;
 
 public class FullScreenImageFragment extends DialogFragment {
 
     public static final String KEY_IMAGE = "image";
 
-    private PixabayImage image;
+    private URLImage image;
 
-    public static FullScreenImageFragment newInstance(PixabayImage image) {
+    public static FullScreenImageFragment newInstance(URLImage image) {
         Bundle args = new Bundle();
         args.putSerializable(KEY_IMAGE, image);
         FullScreenImageFragment fragment = new FullScreenImageFragment();
@@ -32,7 +32,7 @@ public class FullScreenImageFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_NoTitleBar);
-        image = (PixabayImage) getArguments().getSerializable(KEY_IMAGE);
+        image = (URLImage) getArguments().getSerializable(KEY_IMAGE);
     }
 
     @Nullable
@@ -45,7 +45,7 @@ public class FullScreenImageFragment extends DialogFragment {
         toolbar.setNavigationOnClickListener(v -> this.dismiss());
 
         Picasso.get()
-                .load(image.getLargeImageURL())
+                .load(image.getLargeURL())
                 .into((ImageView) view.findViewById(R.id.img));
 
         return view;

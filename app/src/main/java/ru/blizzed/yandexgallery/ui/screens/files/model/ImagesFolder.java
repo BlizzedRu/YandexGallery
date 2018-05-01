@@ -8,7 +8,7 @@ public class ImagesFolder {
 
     private String title;
 
-    private List<Image> imagesList;
+    private List<FileImage> imagesList;
 
     private File file;
 
@@ -21,11 +21,11 @@ public class ImagesFolder {
         return file.getName();
     }
 
-    public List<Image> getImagesList() {
+    public List<FileImage> getImagesList() {
         return imagesList;
     }
 
-    public void addImage(Image image) {
+    public void addImage(FileImage image) {
         imagesList.add(image);
     }
 

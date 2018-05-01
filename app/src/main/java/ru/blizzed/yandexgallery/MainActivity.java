@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 
+import ru.blizzed.yandexgallery.ui.screens.favorite.FavoritePage;
 import ru.blizzed.yandexgallery.ui.screens.feed.FeedPage;
 import ru.blizzed.yandexgallery.ui.screens.files.FilesPage;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FavoritePage favoritePage = new FavoritePage();
     private FilesPage filesPage = new FilesPage();
     private FeedPage feedPage = new FeedPage();
 
@@ -19,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.navigation_files:
                 getFragmentManager().beginTransaction().replace(R.id.pagesContainer, filesPage).commit();
+                return true;
+            case R.id.navigation_favorite:
+                getFragmentManager().beginTransaction().replace(R.id.pagesContainer, favoritePage).commit();
                 return true;
         }
         return false;

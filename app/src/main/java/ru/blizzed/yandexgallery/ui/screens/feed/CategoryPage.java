@@ -16,12 +16,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.blizzed.pixabaylib.model.PixabayImage;
 import ru.blizzed.pixabaylib.params.CategoryParam;
+import ru.blizzed.yandexgallery.App;
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.model.URLImage;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
 import ru.blizzed.yandexgallery.ui.screens.FullScreenImageFragment;
 import ru.blizzed.yandexgallery.ui.screens.feed.model.PixabayImagesRepository;
@@ -34,7 +36,7 @@ public class CategoryPage extends Fragment {
     private CategoryParam.Category category;
     private ImagesFeedViewAdapter imagesAdapter;
 
-    private List<PixabayImage> images;
+    private List<URLImage> images;
 
     private PixabayImagesRepository repository;
     private Disposable imagesDisposable;
@@ -71,6 +73,9 @@ public class CategoryPage extends Fragment {
         imagesAdapter = new ImagesFeedViewAdapter(spanCount, images, (position, item) -> {
             FullScreenImageFragment dialog = FullScreenImageFragment.newInstance(item);
             dialog.show(getFragmentManager(), "");
+            Completable.fromAction(() -> {
+                App.getInstance().getDatabase().favoriteDAO().insertAll(item);
+            }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe();
         });
         imagesRecycler.setAdapter(imagesAdapter);
 

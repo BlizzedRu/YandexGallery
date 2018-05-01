@@ -13,14 +13,14 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.ui.screens.files.model.Image;
+import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
 
 public class ImagePreviewViewAdapter extends RecyclerView.Adapter<ImagePreviewViewAdapter.ViewHolder> {
 
     private Context context;
-    private List<Image> images;
+    private List<FileImage> images;
 
-    public ImagePreviewViewAdapter(List<Image> images) {
+    public ImagePreviewViewAdapter(List<FileImage> images) {
         this.images = images;
     }
 
@@ -28,7 +28,7 @@ public class ImagePreviewViewAdapter extends RecyclerView.Adapter<ImagePreviewVi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.image_preview_square, parent, false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_image_preview_square, parent, false));
     }
 
     @Override

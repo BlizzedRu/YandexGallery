@@ -2,11 +2,11 @@ package ru.blizzed.yandexgallery.ui.screens.files.model;
 
 import java.io.File;
 
-public class Image {
+public class FileImage {
 
     private File file;
 
-    public Image(File file) {
+    public FileImage(File file) {
         this.file = file;
     }
 
