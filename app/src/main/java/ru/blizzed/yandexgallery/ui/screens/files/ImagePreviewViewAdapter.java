@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -33,11 +34,12 @@ public class ImagePreviewViewAdapter extends RecyclerView.Adapter<ImagePreviewVi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Picasso.get()
+        Glide.with(context)
                 .load(images.get(position).getFile())
-                .centerCrop()
-                .resizeDimen(R.dimen.image_preview, R.dimen.image_preview)
-                .placeholder(R.drawable.background_placeholder)
+                .apply(new RequestOptions()
+                        .centerCrop()
+                        .placeholder(R.drawable.background_placeholder)
+                )
                 .into(holder.img);
     }
 

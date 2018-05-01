@@ -96,8 +96,8 @@ public class CategoryPage extends Fragment {
                 }
             }
         });
-
         return view;
+
     }
 
     private void loadMore() {

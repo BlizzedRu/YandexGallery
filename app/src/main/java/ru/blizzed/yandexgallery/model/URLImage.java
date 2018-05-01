@@ -1,6 +1,7 @@
 package ru.blizzed.yandexgallery.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -24,6 +25,7 @@ public class URLImage implements Parcelable {
 
     private long timestamp;
 
+    @Ignore
     public URLImage(PixabayImage pixabayImage) {
         largeURL = pixabayImage.getLargeImageURL();
         mediumURL = pixabayImage.getWebformatURL();

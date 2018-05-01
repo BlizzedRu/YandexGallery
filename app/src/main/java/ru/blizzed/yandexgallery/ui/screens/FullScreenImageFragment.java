@@ -1,6 +1,7 @@
 package ru.blizzed.yandexgallery.ui.screens;
 
 import android.app.DialogFragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toolbar;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.URLImage;
@@ -22,7 +26,7 @@ public class FullScreenImageFragment extends DialogFragment {
 
     public static FullScreenImageFragment newInstance(URLImage image) {
         Bundle args = new Bundle();
-        args.putSerializable(KEY_IMAGE, image);
+        args.putParcelable(KEY_IMAGE, image);
         FullScreenImageFragment fragment = new FullScreenImageFragment();
         fragment.setArguments(args);
         return fragment;
@@ -32,7 +36,7 @@ public class FullScreenImageFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_NoTitleBar);
-        image = (URLImage) getArguments().getSerializable(KEY_IMAGE);
+        image = getArguments().getParcelable(KEY_IMAGE);
     }
 
     @Nullable
@@ -44,9 +48,18 @@ public class FullScreenImageFragment extends DialogFragment {
         toolbar.setTitle(image.getType());
         toolbar.setNavigationOnClickListener(v -> this.dismiss());
 
-        Picasso.get()
+        ImageView img = view.findViewById(R.id.img);
+
+        RequestBuilder<Drawable> previewRequest = Glide.with(img)
+                .load(image.getPreviewURL());
+
+        Glide.with(getActivity().getApplicationContext())
                 .load(image.getLargeURL())
-                .into((ImageView) view.findViewById(R.id.img));
+                .thumbnail(previewRequest)
+                .apply(new RequestOptions()
+                        .dontTransform()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL))
+                .into(img);
 
         return view;
     }
