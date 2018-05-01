@@ -1,6 +1,5 @@
 package ru.blizzed.yandexgallery.ui.screens.files;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,37 +8,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.arellomobile.mvp.MvpFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FilesImageRepository;
-import ru.blizzed.yandexgallery.ui.screens.files.model.ImagesFolder;
+import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesRepository;
 
-public class FilesPage extends Fragment {
+public class FilesPage extends MvpFragment implements FilesContract.View {
 
     @BindView(R.id.foldersRecycler)
     RecyclerView foldersRecycler;
 
+    @InjectPresenter
+    FilesPresenter presenter;
+
     private ImagesFolderViewAdapter folderAdapter;
 
-    private FilesImageRepository repository;
-    private Disposable repositoryDisposable;
-
-    private List<ImagesFolder> folderList;
+    private List<FileImagesFolder> folderList;
 
     private Unbinder unbinder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        repository = new FilesImageRepository();
         folderList = new ArrayList<>();
     }
 
@@ -54,21 +53,48 @@ public class FilesPage extends Fragment {
         foldersRecycler.setAdapter(folderAdapter);
         foldersRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        repositoryDisposable = repository.getImageFolders()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(folder -> {
-                    folderList.add(folder);
-                    folderAdapter.notifyItemInserted(folderList.size() - 1);
-                });
-
         return view;
+    }
+
+    @ProvidePresenter
+    public FilesPresenter providePresenter() {
+        return new FilesPresenter(new FileImagesRepository());
+    }
+
+    @Override
+    public void showEmptyMessage() {
+
+    }
+
+    @Override
+    public void hideEmptyMessage() {
+
+    }
+
+    @Override
+    public void showContent() {
+
+    }
+
+    @Override
+    public void hideContent() {
+
+    }
+
+    @Override
+    public void addFolder(FileImagesFolder folder) {
+        folderList.add(folder);
+        folderAdapter.notifyItemInserted(folderList.size() - 1);
+    }
+
+    @Override
+    public void openFolder(FileImagesFolder folder) {
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        repositoryDisposable.dispose();
     }
 }

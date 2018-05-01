@@ -13,13 +13,13 @@ import butterknife.ButterKnife;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
-import ru.blizzed.yandexgallery.ui.screens.files.model.ImagesFolder;
+import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 
-public class ImagesFolderViewAdapter extends ItemClickableRecyclerViewAdapter<ImagesFolder> {
+public class ImagesFolderViewAdapter extends ItemClickableRecyclerViewAdapter<FileImagesFolder> {
 
     private int imageSpacingPx;
 
-    public ImagesFolderViewAdapter(List<ImagesFolder> data, @NonNull OnItemClickListener listener) {
+    public ImagesFolderViewAdapter(List<FileImagesFolder> data, @NonNull OnItemClickListener listener) {
         super(data, listener);
     }
 
@@ -37,7 +37,7 @@ public class ImagesFolderViewAdapter extends ItemClickableRecyclerViewAdapter<Im
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ViewHolder vh = (ViewHolder) holder;
-        ImagesFolder folder = getData().get(position);
+        FileImagesFolder folder = getData().get(position);
         vh.title.setText(folder.getTitle());
 
         int imagesCount = folder.getImagesList().size();

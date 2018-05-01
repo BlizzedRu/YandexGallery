@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImagesFolder {
+public class FileImagesFolder {
 
     private String title;
 
@@ -12,7 +12,7 @@ public class ImagesFolder {
 
     private File file;
 
-    public ImagesFolder(File file) {
+    public FileImagesFolder(File file) {
         this.file = file;
         imagesList = new ArrayList<>();
     }
