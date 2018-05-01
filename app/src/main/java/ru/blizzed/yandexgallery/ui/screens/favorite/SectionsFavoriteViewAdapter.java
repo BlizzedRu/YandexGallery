@@ -13,8 +13,8 @@ import butterknife.ButterKnife;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.URLImage;
 import ru.blizzed.yandexgallery.ui.BaseRecyclerViewAdapter;
+import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListViewAdapter;
 import ru.blizzed.yandexgallery.ui.screens.favorite.model.Section;
-import ru.blizzed.yandexgallery.ui.screens.feed.ImagesFeedViewAdapter;
 
 public class SectionsFavoriteViewAdapter extends BaseRecyclerViewAdapter<Section<URLImage>> {
 
@@ -39,7 +39,7 @@ public class SectionsFavoriteViewAdapter extends BaseRecyclerViewAdapter<Section
         Section<URLImage> section = getData().get(position);
         vh.title.setText(section.getTitle());
 
-        ImagesFeedViewAdapter adapter = new ImagesFeedViewAdapter(2, section.getItems(), (position1, item) -> {
+        EndlessImageListViewAdapter adapter = new EndlessImageListViewAdapter(2, section.getItems(), (position1, item) -> {
         });
         vh.recycler.setAdapter(adapter);
         vh.recycler.setLayoutManager(new LinearLayoutManager(context));

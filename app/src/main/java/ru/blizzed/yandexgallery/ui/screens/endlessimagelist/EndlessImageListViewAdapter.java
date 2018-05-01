@@ -1,4 +1,4 @@
-package ru.blizzed.yandexgallery.ui.screens.feed;
+package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +16,13 @@ import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.URLImage;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 
-public class ImagesFeedViewAdapter extends ItemClickableRecyclerViewAdapter<URLImage> {
+public class EndlessImageListViewAdapter extends ItemClickableRecyclerViewAdapter<URLImage> {
 
     private int childWidth;
     private int childHeight;
     private int spanCount;
 
-    public ImagesFeedViewAdapter(int spanCount, List<URLImage> data, @NonNull OnItemClickListener<URLImage> listener) {
+    public EndlessImageListViewAdapter(int spanCount, List<URLImage> data, @NonNull OnItemClickListener<URLImage> listener) {
         super(data, listener);
         this.spanCount = spanCount;
     }
