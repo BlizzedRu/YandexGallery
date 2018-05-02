@@ -26,7 +26,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
     RecyclerView imagesRecycler;
 
     private EndlessImageListViewAdapter<T> imagesAdapter;
-    private List<T> images;
+    private ArrayList<T> images;
     private Unbinder unbinder;
 
     @Override
@@ -72,6 +72,10 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
     protected abstract EndlessImageListPresenter<T> getPresenter();
 
     protected abstract EndlessImageListContract.Model<T> provideModel();
+
+    protected ArrayList<T> getImages() {
+        return images;
+    }
 
     @Override
     public void showEmptyMessage() {

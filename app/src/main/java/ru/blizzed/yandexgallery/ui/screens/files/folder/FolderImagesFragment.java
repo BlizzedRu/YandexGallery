@@ -5,11 +5,11 @@ import android.os.Bundle;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
-import ru.blizzed.yandexgallery.ui.FullScreenFileImageFragment;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageFragment;
 
 public class FolderImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage> {
 
@@ -45,7 +45,7 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
 
     @Override
     public void openImage(FileImage image) {
-        FullScreenFileImageFragment dialog = FullScreenFileImageFragment.newInstance(image);
+        FullScreenFileImageFragment dialog = FullScreenFileImageFragment.newInstance(getImages(), getImages().indexOf(image));
         dialog.show(getFragmentManager(), "fullscreen_file_image");
     }
 
