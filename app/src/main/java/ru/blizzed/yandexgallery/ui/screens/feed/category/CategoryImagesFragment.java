@@ -6,6 +6,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import ru.blizzed.pixabaylib.params.CategoryParam;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageFragment;
@@ -35,6 +36,11 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
     @Override
     protected EndlessImageListContract.Model<URLImage> provideModel() {
         return new PixabayCategoryImagesRepository(category, getResources().getInteger(R.integer.images_per_request));
+    }
+
+    @Override
+    protected ImageLoader<URLImage> provideImageLoader() {
+        return ImageLoader.URL_IMAGE_PREVIEW;
     }
 
     @Override

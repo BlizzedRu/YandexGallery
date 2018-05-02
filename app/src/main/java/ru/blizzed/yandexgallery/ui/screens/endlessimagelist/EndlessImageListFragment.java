@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
 
 public abstract class EndlessImageListFragment<T extends Image> extends MvpFragment implements EndlessImageListContract.View<T> {
@@ -43,7 +44,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
         unbinder = ButterKnife.bind(this, view);
 
         int spanCount = getResources().getInteger(R.integer.feed_span_count);
-        imagesAdapter = new EndlessImageListViewAdapter<>(spanCount, images, (position, item) -> getPresenter().onImageClicked(item)/*presenter.onImageClicked(item)*/);
+        imagesAdapter = new EndlessImageListViewAdapter<>(spanCount, images, provideImageLoader(), (position, item) -> getPresenter().onImageClicked(item)/*presenter.onImageClicked(item)*/);
         imagesRecycler.setAdapter(imagesAdapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spanCount);
@@ -72,6 +73,8 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
     protected abstract EndlessImageListPresenter<T> getPresenter();
 
     protected abstract EndlessImageListContract.Model<T> provideModel();
+
+    protected abstract ImageLoader<T> provideImageLoader();
 
     protected ArrayList<T> getImages() {
         return images;

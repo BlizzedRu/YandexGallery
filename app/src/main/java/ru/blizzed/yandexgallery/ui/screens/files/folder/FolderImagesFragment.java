@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
@@ -41,6 +42,11 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
     protected EndlessImageListContract.Model<FileImage> provideModel() {
         folder = getArguments().getParcelable(KEY_FOLDER);
         return new FolderImagesRepository(folder);
+    }
+
+    @Override
+    protected ImageLoader<FileImage> provideImageLoader() {
+        return ImageLoader.FILE_IMAGE;
     }
 
     @Override

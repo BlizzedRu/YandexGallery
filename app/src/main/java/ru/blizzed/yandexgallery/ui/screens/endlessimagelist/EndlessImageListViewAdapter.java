@@ -6,25 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 
 public class EndlessImageListViewAdapter<T extends Image> extends ItemClickableRecyclerViewAdapter<T> {
+
+    private ImageLoader<T> imageLoader;
 
     private int childWidth;
     private int childHeight;
     private int spanCount;
 
-    public EndlessImageListViewAdapter(int spanCount, List<T> data, @NonNull OnItemClickListener<T> listener) {
+    public EndlessImageListViewAdapter(int spanCount, List<T> data, ImageLoader<T> imageLoader, @NonNull OnItemClickListener<T> listener) {
         super(data, listener);
         this.spanCount = spanCount;
+        this.imageLoader = imageLoader;
     }
 
     @Override
@@ -49,17 +49,9 @@ public class EndlessImageListViewAdapter<T extends Image> extends ItemClickableR
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        Image image = getData().get(position);
-
         holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(childWidth, childHeight));
 
-        Glide.with(context)
-                .load(image.getMediumURL())
-                .apply(new RequestOptions()
-                        .placeholder(R.drawable.background_placeholder)
-                        .dontTransform()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(((ViewHolder) holder).img);
+        imageLoader.loadImage(((ViewHolder) holder).img, getData().get(position), true);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

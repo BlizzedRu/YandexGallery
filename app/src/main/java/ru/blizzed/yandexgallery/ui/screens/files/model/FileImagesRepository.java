@@ -14,8 +14,8 @@ import ru.blizzed.yandexgallery.ui.screens.files.FilesContract;
 
 public class FileImagesRepository implements FilesContract.Model {
 
-    private static List<String> imgExtensions = Arrays.asList("jpg", "png", "jpeg", "bmp", "gif", "ico");
-    private static List<String> foldersBlackList = Arrays.asList("/storage/emulated/0/Android");
+    private static final List<String> IMG_EXTENSIONS = Arrays.asList("jpg", "png", "jpeg", "bmp", "gif", "ico");
+    private static final List<String> FOLDERS_BLACK_LIST = Arrays.asList("/storage/emulated/0/Android");
 
     @Override
     public Flowable<FileImagesFolder> getImageFolders() {
@@ -26,17 +26,22 @@ public class FileImagesRepository implements FilesContract.Model {
     }
 
     private void handleDirectory(File directory, FlowableEmitter<FileImagesFolder> emitter) {
-        if (foldersBlackList.contains(directory.getAbsolutePath()) || directory.getName().startsWith("."))
+        if (FOLDERS_BLACK_LIST.contains(directory.getAbsolutePath()) || directory.getName().startsWith("."))
             return;
-        FileImagesFolder fileImagesFolder = null;
-        for (File file : directory.listFiles()) {
-            if (file.isDirectory()) handleDirectory(file, emitter);
-            else if (isFileAnImage(file)) {
-                if (fileImagesFolder == null) fileImagesFolder = new FileImagesFolder(directory);
-                fileImagesFolder.addImage(new FileImage(file));
+        new Thread(() -> {
+            FileImagesFolder fileImagesFolder = null;
+            for (File file : directory.listFiles()) {
+                if (file.isDirectory()) handleDirectory(file, emitter);
+                else if (isFileAnImage(file)) {
+                    if (fileImagesFolder == null)
+                        fileImagesFolder = new FileImagesFolder(directory);
+                    fileImagesFolder.addImage(new FileImage(file));
+                }
             }
-        }
-        if (fileImagesFolder != null) emitter.onNext(fileImagesFolder);
+            if (fileImagesFolder != null) emitter.onNext(fileImagesFolder);
+
+            Thread.currentThread().interrupt();
+        }).run();
     }
 
     private File getRootFile() {
@@ -45,7 +50,7 @@ public class FileImagesRepository implements FilesContract.Model {
 
     private boolean isFileAnImage(File file) {
         String ext = MimeTypeMap.getFileExtensionFromUrl(file.getName());
-        return imgExtensions.contains(ext);
+        return IMG_EXTENSIONS.contains(ext);
     }
 
 }

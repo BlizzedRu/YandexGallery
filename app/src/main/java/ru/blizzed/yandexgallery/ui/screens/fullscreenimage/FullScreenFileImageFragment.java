@@ -1,14 +1,10 @@
 package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
 
 import android.os.Bundle;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
+import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
 
 public class FullScreenFileImageFragment extends FullScreenImageFragment<FileImage> {
@@ -25,16 +21,6 @@ public class FullScreenFileImageFragment extends FullScreenImageFragment<FileIma
 
     @Override
     protected ImageLoader<FileImage> provideImageLoader() {
-        return new ImageLoader<FileImage>() {
-            @Override
-            void loadImage(ImageView imageView, FileImage image) {
-                Glide.with(getActivity().getApplicationContext())
-                        .load(image.getFile())
-                        .apply(new RequestOptions()
-                                .dontTransform()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL))
-                        .into(imageView);
-            }
-        };
+        return ImageLoader.FILE_IMAGE;
     }
 }

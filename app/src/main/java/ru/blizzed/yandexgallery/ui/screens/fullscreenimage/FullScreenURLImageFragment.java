@@ -1,17 +1,11 @@
 package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
 import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.ui.ImageLoader;
 
 public class FullScreenURLImageFragment extends FullScreenImageFragment<URLImage> {
 
@@ -27,20 +21,6 @@ public class FullScreenURLImageFragment extends FullScreenImageFragment<URLImage
 
     @Override
     protected ImageLoader<URLImage> provideImageLoader() {
-        return new ImageLoader<URLImage>() {
-            @Override
-            void loadImage(ImageView imageView, URLImage image) {
-                RequestBuilder<Drawable> previewRequest = Glide.with(imageView)
-                        .load(image.getPreviewURL());
-
-                Glide.with(getActivity().getApplicationContext())
-                        .load(image.getLargeURL())
-                        .thumbnail(previewRequest)
-                        .apply(new RequestOptions()
-                                .dontTransform()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL))
-                        .into(imageView);
-            }
-        };
+        return ImageLoader.URL_IMAGE_FULL;
     }
 }

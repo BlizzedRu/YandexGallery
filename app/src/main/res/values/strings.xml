@@ -11,4 +11,6 @@
         <item quantity="zero">%1$d фотографий</item>
     </plurals>
 
+    <string name="full_screen_image_title">Фотография %1$d из %2$d</string>
+
 </resources>

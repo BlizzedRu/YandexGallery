@@ -9,16 +9,16 @@ import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.RecycledPagerAdapter;
 
 public class FullScreenImagePagerAdapter<T extends Image> extends RecycledPagerAdapter<FullScreenImagePagerAdapter.ViewHolder> {
 
     private List<T> images;
     private LayoutInflater inflater;
+    private ImageLoader<T> imageLoader;
 
-    private FullScreenImageFragment.ImageLoader<T> imageLoader;
-
-    public FullScreenImagePagerAdapter(List<T> images, FullScreenImageFragment.ImageLoader<T> imageLoader) {
+    public FullScreenImagePagerAdapter(List<T> images, ImageLoader<T> imageLoader) {
         this.images = images;
         this.imageLoader = imageLoader;
     }
@@ -41,7 +41,7 @@ public class FullScreenImagePagerAdapter<T extends Image> extends RecycledPagerA
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        imageLoader.loadImage(viewHolder.img, images.get(position));
+        imageLoader.loadImage(viewHolder.img, images.get(position), false);
     }
 
     static class ViewHolder extends RecycledPagerAdapter.ViewHolder {
