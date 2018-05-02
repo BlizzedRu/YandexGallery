@@ -10,8 +10,8 @@
 
     <color name="white">#fff</color>
 
-    <color name="navigation_inactive">#81dadada</color>
+    <color name="navigationInactive">#81dadada</color>
 
-    <color name="toolbar_transparent">#39000000</color>
+    <color name="toolbarTransparent">#39000000</color>
 
 </resources>
