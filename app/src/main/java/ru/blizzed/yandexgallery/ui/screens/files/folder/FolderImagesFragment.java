@@ -1,5 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.files.folder;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -10,13 +11,16 @@ import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListCont
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageActivity;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
 
 public class FolderImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage> {
 
     private static final String KEY_FOLDER = "folder";
+
     @InjectPresenter
     FolderImagePresenter presenter;
+
     private FileImagesFolder folder;
 
     public static FolderImagesFragment newInstance(FileImagesFolder folder) {
@@ -51,8 +55,11 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
 
     @Override
     public void openImage(FileImage image) {
-        FullScreenFileImageFragment dialog = FullScreenFileImageFragment.newInstance(getImages(), getImages().indexOf(image));
-        dialog.show(getFragmentManager(), "fullscreen_file_image");
+        Intent intent = new Intent(getActivity(), FullScreenFileImageActivity.class);
+        intent.putExtra(FullScreenImageActivity.KEY_IMAGES, getImages());
+        intent.putExtra(FullScreenImageActivity.KEY_POSITION, getImages().indexOf(image));
+        intent.putExtra(FullScreenImageActivity.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
+        startActivityForResult(intent, FULL_SCREEN_REQUEST_CODE);
     }
 
 }

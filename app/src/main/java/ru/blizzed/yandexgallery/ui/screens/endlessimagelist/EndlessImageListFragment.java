@@ -1,5 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,9 +21,14 @@ import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
+import static android.app.Activity.RESULT_OK;
+
 public abstract class EndlessImageListFragment<T extends Image> extends MvpFragment implements EndlessImageListContract.View<T> {
+
+    public static final int FULL_SCREEN_REQUEST_CODE = 2324423;
 
     @BindView(R.id.imagesRecycler)
     RecyclerView imagesRecycler;
@@ -101,6 +107,10 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
 
     }
 
+    protected void scrollTo(int position) {
+        imagesRecycler.scrollToPosition(position);
+    }
+
     @Override
     public void addImages(List<T> images) {
         int oldSize = this.images.size();
@@ -116,6 +126,20 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
     @Override
     public void hideLoading() {
 
+    }
+
+    /* Ловим закрытие активити для полноэкранного просмотра изображения,
+     * чтобы проскроллить лену до позиции, на которой юзер закончил просмотр
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == FULL_SCREEN_REQUEST_CODE) {
+                int position = data.getIntExtra(FullScreenImageActivity.KEY_POSITION, 0);
+                scrollTo(position);
+            }
+        }
     }
 
     @Override

@@ -25,10 +25,14 @@ import ru.blizzed.yandexgallery.ui.screens.favorite.model.Section;
 
 public class FavoritePage extends MvpFragment implements FavoriteContract.View {
 
+    public static final String ID = "favorite";
+
     @BindView(R.id.sectionsRecycler)
     RecyclerView sectionsRecycler;
+
     @InjectPresenter
     FavoritePresenter presenter;
+
     private SectionsFavoriteViewAdapter sectionsAdapter;
 
     private Unbinder unbinder;

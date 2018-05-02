@@ -27,6 +27,8 @@ import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 public class FilesPage extends MvpFragment implements FilesContract.View {
 
+    public static final String TAG = "files";
+
     @BindView(R.id.foldersRecycler)
     RecyclerView foldersRecycler;
 

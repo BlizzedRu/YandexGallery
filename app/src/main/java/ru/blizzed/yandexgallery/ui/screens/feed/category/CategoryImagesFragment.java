@@ -1,5 +1,7 @@
 package ru.blizzed.yandexgallery.ui.screens.feed.category;
 
+import android.content.Intent;
+
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
@@ -9,12 +11,14 @@ import ru.blizzed.yandexgallery.model.URLImage;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageActivity;
 
 public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> implements EndlessImageListContract.View<URLImage> {
 
     @InjectPresenter
     CategoryImagesPresenter presenter;
+
     private CategoryParam.Category category;
 
     public static CategoryImagesFragment newInstance(CategoryParam.Category category) {
@@ -45,8 +49,11 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
 
     @Override
     public void openImage(URLImage image) {
-        FullScreenURLImageFragment dialog = FullScreenURLImageFragment.newInstance(getImages(), getImages().indexOf(image));
-        dialog.show(getFragmentManager(), "fullscreen_url_image");
+        Intent intent = new Intent(getActivity(), FullScreenURLImageActivity.class);
+        intent.putExtra(FullScreenImageActivity.KEY_IMAGES, getImages());
+        intent.putExtra(FullScreenImageActivity.KEY_POSITION, getImages().indexOf(image));
+        intent.putExtra(FullScreenImageActivity.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
+        startActivityForResult(intent, FULL_SCREEN_REQUEST_CODE);
     }
 
 }

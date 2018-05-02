@@ -31,10 +31,14 @@ import static ru.blizzed.yandexgallery.ui.screens.feed.CategoriesViewAdapter.KEY
 
 public class FeedPage extends MvpFragment implements FeedContract.View {
 
+    public static final String TAG = "feed";
+
     @BindView(R.id.categoriesRecycler)
     RecyclerView categoriesRecycler;
+
     @InjectPresenter
     FeedPresenter presenter;
+
     private CategoriesViewAdapter categoriesAdapter;
     private Map<CategoryParam.Category, Fragment> categoryPages;
     private Unbinder unbinder;
