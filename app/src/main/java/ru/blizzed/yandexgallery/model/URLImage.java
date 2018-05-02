@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import ru.blizzed.pixabaylib.model.PixabayImage;
 
 @Entity
-public class URLImage implements Parcelable {
+public class URLImage implements Parcelable, Image {
 
     @NonNull
     @PrimaryKey
@@ -68,6 +68,7 @@ public class URLImage implements Parcelable {
         return largeURL;
     }
 
+    @Override
     public String getMediumURL() {
         return mediumURL;
     }

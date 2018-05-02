@@ -4,12 +4,16 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/pageBackground</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
+        <item name="android:colorControlNormal">@color/white</item>
     </style>
 
     <style name="AppTheme.NoTitleBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/pageBackground</item>
     </style>
 
 </resources>

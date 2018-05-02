@@ -11,7 +11,7 @@ import ru.blizzed.yandexgallery.model.URLImage;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.utils.PixabayHelper;
 
-public class PixabayCategoryImagesRepository implements EndlessImageListContract.Model {
+public class PixabayCategoryImagesRepository implements EndlessImageListContract.Model<URLImage> {
 
     private int loadCount;
 

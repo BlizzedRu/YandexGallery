@@ -11,21 +11,25 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.ui.BaseRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 
-public class ImagesFolderViewAdapter extends ItemClickableRecyclerViewAdapter<FileImagesFolder> {
+public class ImagesFolderViewAdapter extends BaseRecyclerViewAdapter<FileImagesFolder> {
+
+    private ItemClickableRecyclerViewAdapter.OnItemClickListener<FileImagesFolder> listener;
 
     private int imageSpacingPx;
 
-    public ImagesFolderViewAdapter(List<FileImagesFolder> data, @NonNull OnItemClickListener listener) {
-        super(data, listener);
+    public ImagesFolderViewAdapter(List<FileImagesFolder> data, @NonNull ItemClickableRecyclerViewAdapter.OnItemClickListener<FileImagesFolder> listener) {
+        super(data);
+        this.listener = listener;
     }
 
     @Override
     protected int getItemLayoutResId() {
-        return R.layout.folder_images;
+        return R.layout.item_folder_images;
     }
 
     @Override
@@ -47,6 +51,8 @@ public class ImagesFolderViewAdapter extends ItemClickableRecyclerViewAdapter<Fi
         vh.imagesRecycler.setLayoutManager(new GridLayoutManager(context, 6));
         if (vh.imagesRecycler.getItemDecorationCount() == 0)
             vh.imagesRecycler.addItemDecoration(new GridSpacingItemDecoration(6, imageSpacingPx));
+
+        vh.root.setOnClickListener(v -> listener.onItemClicked(position, folder));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -59,6 +65,9 @@ public class ImagesFolderViewAdapter extends ItemClickableRecyclerViewAdapter<Fi
 
         @BindView(R.id.imagesRecycler)
         RecyclerView imagesRecycler;
+
+        @BindView(R.id.root)
+        View root;
 
         ViewHolder(View itemView) {
             super(itemView);

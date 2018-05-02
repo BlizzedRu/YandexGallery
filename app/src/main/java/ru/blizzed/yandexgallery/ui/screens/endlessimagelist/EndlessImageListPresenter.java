@@ -2,24 +2,26 @@ package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
 import android.util.Log;
 
-import com.arellomobile.mvp.InjectViewState;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
+import ru.blizzed.yandexgallery.model.Image;
 
-@InjectViewState
-public class EndlessImageListPresenter extends BaseContract.BasePresenterImpl<EndlessImageListContract.View> implements EndlessImageListContract.Presenter {
+import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract.BasePresenterImpl;
+import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract.Model;
+import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract.Presenter;
+import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract.View;
 
-    private EndlessImageListContract.Model repository;
+public class EndlessImageListPresenter<T extends Image> extends BasePresenterImpl<View<T>> implements Presenter<T> {
+
+    private Model<T> repository;
 
     private Disposable imagesDisposable;
 
     private int imagesCount = 0;
     private boolean toEndScrolled = false;
 
-    public EndlessImageListPresenter(EndlessImageListContract.Model repository) {
+    public EndlessImageListPresenter(Model<T> repository) {
         this.repository = repository;
         loadMore();
     }
@@ -30,6 +32,11 @@ public class EndlessImageListPresenter extends BaseContract.BasePresenterImpl<En
             toEndScrolled = true;
             loadMore();
         }
+    }
+
+    @Override
+    public void onImageClicked(T image) {
+        getViewState().openImage(image);
     }
 
     private void loadMore() {

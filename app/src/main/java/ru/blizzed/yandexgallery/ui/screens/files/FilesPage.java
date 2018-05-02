@@ -1,5 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.files;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.ui.screens.files.folder.FolderImagesActivity;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesRepository;
 
@@ -48,8 +50,7 @@ public class FilesPage extends MvpFragment implements FilesContract.View {
         View view = inflater.inflate(R.layout.page_files, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        folderAdapter = new ImagesFolderViewAdapter(folderList, (position, item) -> {
-        });
+        folderAdapter = new ImagesFolderViewAdapter(folderList, (position, item) -> presenter.onFolderClicked(item));
         foldersRecycler.setAdapter(folderAdapter);
         foldersRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -89,7 +90,9 @@ public class FilesPage extends MvpFragment implements FilesContract.View {
 
     @Override
     public void openFolder(FileImagesFolder folder) {
-
+        Intent intent = new Intent(getActivity(), FolderImagesActivity.class);
+        intent.putExtra(FolderImagesActivity.KEY_FOLDER, folder);
+        startActivity(intent);
     }
 
     @Override

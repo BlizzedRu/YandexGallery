@@ -23,7 +23,7 @@ public class FilesPresenter extends FilesContract.BasePresenterImpl<FilesContrac
 
     @Override
     public void onFolderClicked(FileImagesFolder folder) {
-
+        getViewState().openFolder(folder);
     }
 
     @Override

@@ -3,18 +3,18 @@ package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.model.Image;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
 
 public interface EndlessImageListContract extends BaseContract {
 
-    interface Model extends BaseModel {
-        Observable<List<URLImage>> getImagesObservable(int offset);
+    interface Model<T extends Image> extends BaseModel {
+        Observable<List<T>> getImagesObservable(int offset);
 
         boolean hasNextImages();
     }
 
-    interface View extends BaseView {
+    interface View<T extends Image> extends BaseView {
         void showEmptyMessage();
 
         void hideEmptyMessage();
@@ -23,15 +23,19 @@ public interface EndlessImageListContract extends BaseContract {
 
         void hideContent();
 
-        void addImages(List<URLImage> images);
+        void addImages(List<T> images);
 
         void showLoading();
 
         void hideLoading();
+
+        void openImage(T image);
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter<T extends Image> extends BasePresenter {
         void onDownScrolled(int lastVisibleItemPosition);
+
+        void onImageClicked(T image);
     }
 
 }

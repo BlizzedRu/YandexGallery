@@ -28,15 +28,15 @@ public class FileImagesRepository implements FilesContract.Model {
     private void handleDirectory(File directory, FlowableEmitter<FileImagesFolder> emitter) {
         if (foldersBlackList.contains(directory.getAbsolutePath()) || directory.getName().startsWith("."))
             return;
-        FileImagesFolder FileImagesFolder = null;
+        FileImagesFolder fileImagesFolder = null;
         for (File file : directory.listFiles()) {
             if (file.isDirectory()) handleDirectory(file, emitter);
             else if (isFileAnImage(file)) {
-                if (FileImagesFolder == null) FileImagesFolder = new FileImagesFolder(directory);
-                FileImagesFolder.addImage(new FileImage(file));
+                if (fileImagesFolder == null) fileImagesFolder = new FileImagesFolder(directory);
+                fileImagesFolder.addImage(new FileImage(file));
             }
         }
-        if (FileImagesFolder != null) emitter.onNext(FileImagesFolder);
+        if (fileImagesFolder != null) emitter.onNext(fileImagesFolder);
     }
 
     private File getRootFile() {

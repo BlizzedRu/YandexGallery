@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arellomobile.mvp.MvpFragment;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,20 +17,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.model.Image;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
-import ru.blizzed.yandexgallery.ui.screens.FullScreenImageFragment;
 
-public abstract class EndlessImageListFragment extends MvpFragment implements EndlessImageListContract.View {
+public abstract class EndlessImageListFragment<T extends Image> extends MvpFragment implements EndlessImageListContract.View<T> {
 
     @BindView(R.id.imagesRecycler)
     RecyclerView imagesRecycler;
 
-    @InjectPresenter
-    EndlessImageListPresenter presenter;
-
-    private EndlessImageListViewAdapter imagesAdapter;
-    private List<URLImage> images;
+    private EndlessImageListViewAdapter<T> imagesAdapter;
+    private List<T> images;
     private Unbinder unbinder;
 
     @Override
@@ -44,15 +38,12 @@ public abstract class EndlessImageListFragment extends MvpFragment implements En
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.page_category, container, false);
+        View view = inflater.inflate(R.layout.fragment_endless_image_list, container, false);
 
         unbinder = ButterKnife.bind(this, view);
 
         int spanCount = getResources().getInteger(R.integer.feed_span_count);
-        imagesAdapter = new EndlessImageListViewAdapter(spanCount, images, (position, item) -> {
-            FullScreenImageFragment dialog = FullScreenImageFragment.newInstance(item);
-            dialog.show(getFragmentManager(), "");
-        });
+        imagesAdapter = new EndlessImageListViewAdapter<>(spanCount, images, (position, item) -> getPresenter().onImageClicked(item)/*presenter.onImageClicked(item)*/);
         imagesRecycler.setAdapter(imagesAdapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spanCount);
@@ -64,19 +55,23 @@ public abstract class EndlessImageListFragment extends MvpFragment implements En
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) presenter.onDownScrolled(layoutManager.findLastVisibleItemPosition());
+                // if (dy > 0) presenter.onDownScrolled(layoutManager.findLastVisibleItemPosition());
+                if (dy > 0)
+                    getPresenter().onDownScrolled(layoutManager.findLastVisibleItemPosition());
             }
         });
 
         return view;
     }
 
-    @ProvidePresenter
-    EndlessImageListPresenter providePresenter() {
-        return new EndlessImageListPresenter(provideModel());
-    }
+    /*@ProvidePresenter
+    protected EndlessImageListPresenter<T> providePresenter() {
+        return new EndlessImageListPresenter<>(provideModel());
+    }*/
 
-    protected abstract EndlessImageListContract.Model provideModel();
+    protected abstract EndlessImageListPresenter<T> getPresenter();
+
+    protected abstract EndlessImageListContract.Model<T> provideModel();
 
     @Override
     public void showEmptyMessage() {
@@ -99,7 +94,7 @@ public abstract class EndlessImageListFragment extends MvpFragment implements En
     }
 
     @Override
-    public void addImages(List<URLImage> images) {
+    public void addImages(List<T> images) {
         int oldSize = this.images.size();
         this.images.addAll(images);
         imagesAdapter.notifyItemRangeInserted(oldSize, this.images.size() - 1);

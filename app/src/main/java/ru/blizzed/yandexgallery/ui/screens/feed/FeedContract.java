@@ -7,6 +7,7 @@ import ru.blizzed.yandexgallery.SelectableCategory;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
 
 public interface FeedContract extends BaseContract {
+
     interface Model extends BaseContract.BaseModel {
         List<CategoryParam.Category> getCategories();
     }

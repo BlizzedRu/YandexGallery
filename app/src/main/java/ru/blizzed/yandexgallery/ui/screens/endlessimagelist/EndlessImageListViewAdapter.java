@@ -13,16 +13,16 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.model.Image;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 
-public class EndlessImageListViewAdapter extends ItemClickableRecyclerViewAdapter<URLImage> {
+public class EndlessImageListViewAdapter<T extends Image> extends ItemClickableRecyclerViewAdapter<T> {
 
     private int childWidth;
     private int childHeight;
     private int spanCount;
 
-    public EndlessImageListViewAdapter(int spanCount, List<URLImage> data, @NonNull OnItemClickListener<URLImage> listener) {
+    public EndlessImageListViewAdapter(int spanCount, List<T> data, @NonNull OnItemClickListener<T> listener) {
         super(data, listener);
         this.spanCount = spanCount;
     }
@@ -49,7 +49,7 @@ public class EndlessImageListViewAdapter extends ItemClickableRecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        URLImage image = getData().get(position);
+        Image image = getData().get(position);
 
         holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(childWidth, childHeight));
 
@@ -60,7 +60,6 @@ public class EndlessImageListViewAdapter extends ItemClickableRecyclerViewAdapte
                         .dontTransform()
                         .diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(((ViewHolder) holder).img);
-
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
