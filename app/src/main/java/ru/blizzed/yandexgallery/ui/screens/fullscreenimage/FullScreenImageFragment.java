@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
@@ -23,6 +26,10 @@ public abstract class FullScreenImageFragment<T extends Image> extends DialogFra
     private List<T> images;
     private int position;
 
+    private Toolbar toolbar;
+
+    private boolean isToolbarVisible = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +43,14 @@ public abstract class FullScreenImageFragment<T extends Image> extends DialogFra
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_image_fullscreen, container, false);
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> this.dismiss());
         toolbar.setNavigationIcon(R.drawable.ic_back);
 
         updateToolbarTitle(toolbar, position, images.size());
 
         ViewPager viewPager = view.findViewById(R.id.pager);
-        viewPager.setAdapter(new FullScreenImagePagerAdapter<>(images, provideImageLoader()));
+        viewPager.setAdapter(new FullScreenImagePagerAdapter<>(images, provideImageLoader(), this::onImageClicked));
         viewPager.setCurrentItem(position);
         viewPager.setOffscreenPageLimit(5);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -62,6 +69,11 @@ public abstract class FullScreenImageFragment<T extends Image> extends DialogFra
         });
 
         return view;
+    }
+
+    public void onImageClicked(int position, T image) {
+        YoYo.with(isToolbarVisible ? Techniques.FadeOutUp : Techniques.FadeInDown).duration(175).playOn(toolbar);
+        isToolbarVisible = !isToolbarVisible;
     }
 
     protected abstract ImageLoader<T> provideImageLoader();
