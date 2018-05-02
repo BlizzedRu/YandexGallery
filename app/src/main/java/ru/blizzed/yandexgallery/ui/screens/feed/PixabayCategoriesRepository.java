@@ -13,6 +13,7 @@ public class PixabayCategoriesRepository implements FeedContract.Model {
     @Override
     public List<CategoryParam.Category> getCategories() {
         return Observable.fromArray(CategoryParam.Category.values())
+                .sorted((o1, o2) -> o1.name().compareTo(o2.name()))
                 .toList()
                 .blockingGet();
     }

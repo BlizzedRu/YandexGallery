@@ -20,6 +20,7 @@ import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
+import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 public abstract class EndlessImageListFragment<T extends Image> extends MvpFragment implements EndlessImageListContract.View<T> {
 
@@ -43,7 +44,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
 
         unbinder = ButterKnife.bind(this, view);
 
-        int spanCount = getResources().getInteger(R.integer.feed_span_count);
+        int spanCount = getSpanCount();
         imagesAdapter = new EndlessImageListViewAdapter<>(spanCount, images, provideImageLoader(), (position, item) -> getPresenter().onImageClicked(item)/*presenter.onImageClicked(item)*/);
         imagesRecycler.setAdapter(imagesAdapter);
 
@@ -121,6 +122,13 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    private int getSpanCount() {
+        return getResources().getInteger(OrientationUtils.get(getActivity()) == OrientationUtils.Orientation.VERTICAL
+                ? R.integer.preview_list_spans
+                : R.integer.preview_list_spans_horizontal
+        );
     }
 
 }

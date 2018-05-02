@@ -21,8 +21,11 @@ public class ImagePreviewViewAdapter extends RecyclerView.Adapter<ImagePreviewVi
     private Context context;
     private List<FileImage> images;
 
-    public ImagePreviewViewAdapter(List<FileImage> images) {
+    private int maxSize;
+
+    public ImagePreviewViewAdapter(List<FileImage> images, int maxSize) {
         this.images = images;
+        this.maxSize = maxSize;
     }
 
     @NonNull
@@ -45,7 +48,7 @@ public class ImagePreviewViewAdapter extends RecyclerView.Adapter<ImagePreviewVi
 
     @Override
     public int getItemCount() {
-        return Math.min(images.size(), 12);
+        return Math.min(images.size(), maxSize);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

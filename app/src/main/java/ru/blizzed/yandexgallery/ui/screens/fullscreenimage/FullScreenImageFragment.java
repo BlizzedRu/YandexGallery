@@ -26,7 +26,7 @@ public abstract class FullScreenImageFragment<T extends Image> extends DialogFra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_NoTitleBar);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreen);
         images = getArguments().getParcelableArrayList(KEY_IMAGES);
         position = getArguments().getInt(KEY_POSITION);
     }
@@ -49,7 +49,6 @@ public abstract class FullScreenImageFragment<T extends Image> extends DialogFra
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -59,7 +58,6 @@ public abstract class FullScreenImageFragment<T extends Image> extends DialogFra
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -69,7 +67,7 @@ public abstract class FullScreenImageFragment<T extends Image> extends DialogFra
     protected abstract ImageLoader<T> provideImageLoader();
 
     private void updateToolbarTitle(Toolbar toolbar, int position, int amount) {
-        toolbar.setTitle(getString(R.string.full_screen_image_title, position, amount));
+        toolbar.setTitle(getString(R.string.full_screen_image_title, position + 1, amount));
     }
 
 }

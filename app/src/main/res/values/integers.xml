@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="feed_span_count">2</integer>
-    <integer name="feed_span_count_horizontal">6</integer>
+    <integer name="preview_list_spans">2</integer>
+    <integer name="preview_list_spans_horizontal">5</integer>
     <integer name="images_per_request">30</integer>
+
+    <integer name="images_folder_max_count">12</integer>
+    <integer name="images_folder_spans">6</integer>
+    <integer name="images_folder_spans_horizontal">6</integer>
+
+    <integer name="folder_spans">1</integer>
+    <integer name="folder_spans_horizontal">2</integer>
 </resources>

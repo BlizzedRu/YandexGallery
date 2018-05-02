@@ -3,8 +3,8 @@ package ru.blizzed.yandexgallery.ui.screens.files;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +23,7 @@ import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.ui.screens.files.folder.FolderImagesActivity;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesRepository;
+import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 public class FilesPage extends MvpFragment implements FilesContract.View {
 
@@ -52,7 +53,7 @@ public class FilesPage extends MvpFragment implements FilesContract.View {
 
         folderAdapter = new ImagesFolderViewAdapter(folderList, (position, item) -> presenter.onFolderClicked(item));
         foldersRecycler.setAdapter(folderAdapter);
-        foldersRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        foldersRecycler.setLayoutManager(new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL));
 
         return view;
     }
@@ -99,5 +100,12 @@ public class FilesPage extends MvpFragment implements FilesContract.View {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    private int getSpanCount() {
+        return getResources().getInteger(OrientationUtils.get(getActivity()) == OrientationUtils.Orientation.VERTICAL
+                ? R.integer.folder_spans
+                : R.integer.folder_spans_horizontal
+        );
     }
 }
