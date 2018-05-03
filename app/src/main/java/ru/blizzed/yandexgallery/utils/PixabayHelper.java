@@ -10,7 +10,7 @@ import ru.blizzed.pixabaylib.params.LangParam;
 import ru.blizzed.pixabaylib.params.Param;
 import ru.blizzed.pixabaylib.params.PixabayParams;
 import ru.blizzed.yandexgallery.BuildConfig;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.data.model.URLImage;
 
 public final class PixabayHelper {
 
@@ -25,7 +25,6 @@ public final class PixabayHelper {
         List<Param> params = new ArrayList<>(additionalParams);
         params.add(PixabayParams.PER_PAGE.of(count));
         params.add(PixabayParams.PAGE.of(offset / count + 1));
-
         return Pixabay.rxSearch()
                 .image(params.toArray(new Param[params.size()]))
                 .map(PixabayResult::getHits)

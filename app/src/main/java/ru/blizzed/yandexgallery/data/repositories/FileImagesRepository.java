@@ -1,4 +1,4 @@
-package ru.blizzed.yandexgallery.ui.screens.files.model;
+package ru.blizzed.yandexgallery.data.repositories;
 
 import android.os.Environment;
 import android.webkit.MimeTypeMap;
@@ -10,14 +10,14 @@ import java.util.List;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
-import ru.blizzed.yandexgallery.ui.screens.files.FilesContract;
+import ru.blizzed.yandexgallery.data.model.FileImage;
+import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
 
-public class FileImagesRepository implements FilesContract.Model {
+public class FileImagesRepository {
 
     private static final List<String> IMG_EXTENSIONS = Arrays.asList("jpg", "png", "jpeg", "bmp", "gif", "ico");
     private static final List<String> FOLDERS_BLACK_LIST = Arrays.asList("/storage/emulated/0/Android");
 
-    @Override
     public Flowable<FileImagesFolder> getImageFolders() {
         return Flowable.create(emitter -> {
             File root = getRootFile();

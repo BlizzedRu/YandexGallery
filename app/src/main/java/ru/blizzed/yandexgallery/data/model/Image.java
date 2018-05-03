@@ -1,4 +1,4 @@
-package ru.blizzed.yandexgallery.model;
+package ru.blizzed.yandexgallery.data.model;
 
 import android.os.Parcelable;
 

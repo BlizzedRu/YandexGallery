@@ -1,4 +1,4 @@
-package ru.blizzed.yandexgallery.model;
+package ru.blizzed.yandexgallery.data.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
@@ -11,32 +11,6 @@ import ru.blizzed.pixabaylib.model.PixabayImage;
 
 @Entity
 public class URLImage implements Parcelable, Image {
-
-    @NonNull
-    @PrimaryKey
-    private String largeURL;
-    private String mediumURL;
-    private String previewURL;
-
-    private int mediumWidth;
-    private int mediumHeight;
-
-    private String type;
-
-    private long timestamp;
-
-    @Ignore
-    public URLImage(PixabayImage pixabayImage) {
-        largeURL = pixabayImage.getLargeImageURL();
-        mediumURL = pixabayImage.getWebformatURL();
-        previewURL = pixabayImage.getPreviewURL();
-        mediumWidth = (int) pixabayImage.getWebformatWidth();
-        mediumHeight = (int) pixabayImage.getWebformatHeight();
-        type = pixabayImage.getType();
-    }
-
-    public URLImage() {
-    }
 
     public static final Parcelable.Creator<URLImage> CREATOR = new Parcelable.Creator<URLImage>() {
 
@@ -62,10 +36,36 @@ public class URLImage implements Parcelable, Image {
             return new URLImage[size];
         }
     };
+    @NonNull
+    @PrimaryKey
+    private String largeURL;
+    private String mediumURL;
+    private String previewURL;
+    private int mediumWidth;
+    private int mediumHeight;
+    private String type;
+    private long timestamp;
+
+    @Ignore
+    public URLImage(PixabayImage pixabayImage) {
+        largeURL = pixabayImage.getLargeImageURL();
+        mediumURL = pixabayImage.getWebformatURL();
+        previewURL = pixabayImage.getPreviewURL();
+        mediumWidth = (int) pixabayImage.getWebformatWidth();
+        mediumHeight = (int) pixabayImage.getWebformatHeight();
+        type = pixabayImage.getType();
+    }
+
+    public URLImage() {
+    }
 
     @NonNull
     public String getLargeURL() {
         return largeURL;
+    }
+
+    public void setLargeURL(@NonNull String largeURL) {
+        this.largeURL = largeURL;
     }
 
     @Override
@@ -115,10 +115,6 @@ public class URLImage implements Parcelable, Image {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public void setLargeURL(@NonNull String largeURL) {
-        this.largeURL = largeURL;
     }
 
     @Override

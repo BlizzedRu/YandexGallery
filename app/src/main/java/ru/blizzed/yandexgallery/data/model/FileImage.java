@@ -1,10 +1,8 @@
-package ru.blizzed.yandexgallery.ui.screens.files.model;
+package ru.blizzed.yandexgallery.data.model;
 
 import android.os.Parcel;
 
 import java.io.File;
-
-import ru.blizzed.yandexgallery.model.Image;
 
 public class FileImage implements Image {
 

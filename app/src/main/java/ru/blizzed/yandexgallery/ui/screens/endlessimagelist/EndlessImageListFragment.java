@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arellomobile.mvp.MvpFragment;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +16,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
+import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 import static android.app.Activity.RESULT_OK;
 
-public abstract class EndlessImageListFragment<T extends Image> extends MvpFragment implements EndlessImageListContract.View<T> {
+public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFragment implements EndlessImageListContract.View<T> {
 
     public static final int FULL_SCREEN_REQUEST_CODE = 2324423;
 
@@ -51,7 +50,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
         unbinder = ButterKnife.bind(this, view);
 
         int spanCount = getSpanCount();
-        imagesAdapter = new EndlessImageListViewAdapter<>(spanCount, images, provideImageLoader(), (position, item) -> getPresenter().onImageClicked(item)/*presenter.onImageClicked(item)*/);
+        imagesAdapter = new EndlessImageListViewAdapter<>(spanCount, images, provideImageLoader(), (position, item) -> getPresenter().onImageClicked(item));
         imagesRecycler.setAdapter(imagesAdapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spanCount);
@@ -63,7 +62,6 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                // if (dy > 0) presenter.onDownScrolled(layoutManager.findLastVisibleItemPosition());
                 if (dy > 0)
                     getPresenter().onDownScrolled(layoutManager.findLastVisibleItemPosition());
             }
@@ -72,14 +70,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
         return view;
     }
 
-    /*@ProvidePresenter
-    protected EndlessImageListPresenter<T> providePresenter() {
-        return new EndlessImageListPresenter<>(provideModel());
-    }*/
-
     protected abstract EndlessImageListPresenter<T> getPresenter();
-
-    protected abstract EndlessImageListContract.Model<T> provideModel();
 
     protected abstract ImageLoader<T> provideImageLoader();
 
@@ -128,9 +119,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends MvpFragm
 
     }
 
-    /* Ловим закрытие активити для полноэкранного просмотра изображения,
-     * чтобы проскроллить лену до позиции, на которой юзер закончил просмотр
-     */
+    /* Catching closed fullscreen image activity for scrolling to the last position */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

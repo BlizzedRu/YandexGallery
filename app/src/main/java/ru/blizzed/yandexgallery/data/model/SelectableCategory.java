@@ -1,4 +1,4 @@
-package ru.blizzed.yandexgallery;
+package ru.blizzed.yandexgallery.data.model;
 
 import ru.blizzed.pixabaylib.params.CategoryParam;
 

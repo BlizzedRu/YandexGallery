@@ -4,8 +4,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.data.model.FileImage;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
 
 public class FullScreenFileImageActivity extends FullScreenImageActivity<FileImage> {
 

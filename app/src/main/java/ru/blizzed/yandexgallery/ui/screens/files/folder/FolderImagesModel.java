@@ -3,15 +3,15 @@ package ru.blizzed.yandexgallery.ui.screens.files.folder;
 import java.util.List;
 
 import io.reactivex.Observable;
+import ru.blizzed.yandexgallery.data.model.FileImage;
+import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 
-public class FolderImagesRepository implements EndlessImageListContract.Model<FileImage> {
+public class FolderImagesModel implements EndlessImageListContract.Model<FileImage> {
 
     private FileImagesFolder folder;
 
-    public FolderImagesRepository(FileImagesFolder folder) {
+    public FolderImagesModel(FileImagesFolder folder) {
         this.folder = folder;
     }
 

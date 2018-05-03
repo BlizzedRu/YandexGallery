@@ -3,7 +3,7 @@ package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
 
 public interface EndlessImageListContract extends BaseContract {

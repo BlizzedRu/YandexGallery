@@ -11,8 +11,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.blizzed.yandexgallery.model.URLImage;
-import ru.blizzed.yandexgallery.ui.screens.favorite.model.Section;
+import ru.blizzed.yandexgallery.data.model.Section;
+import ru.blizzed.yandexgallery.data.model.URLImage;
 
 @InjectViewState
 public class FavoritePresenter extends FavoriteContract.BasePresenterImpl<FavoriteContract.View> implements FavoriteContract.Presenter {

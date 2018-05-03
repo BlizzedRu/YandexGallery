@@ -1,9 +1,10 @@
-package ru.blizzed.yandexgallery;
+package ru.blizzed.yandexgallery.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 
+import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.ui.screens.favorite.FavoritePage;
 import ru.blizzed.yandexgallery.ui.screens.feed.FeedPage;
 import ru.blizzed.yandexgallery.ui.screens.files.FilesPage;

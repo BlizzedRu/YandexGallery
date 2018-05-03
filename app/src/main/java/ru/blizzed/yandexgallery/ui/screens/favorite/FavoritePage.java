@@ -8,28 +8,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arellomobile.mvp.MvpFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.URLImage;
-import ru.blizzed.yandexgallery.ui.screens.favorite.model.FavoriteImagesRepository;
-import ru.blizzed.yandexgallery.ui.screens.favorite.model.Section;
+import ru.blizzed.yandexgallery.data.model.Section;
+import ru.blizzed.yandexgallery.data.model.URLImage;
+import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
+import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
 
-public class FavoritePage extends MvpFragment implements FavoriteContract.View {
+public class FavoritePage extends DiMvpFragment implements FavoriteContract.View {
 
     public static final String ID = "favorite";
 
     @BindView(R.id.sectionsRecycler)
     RecyclerView sectionsRecycler;
 
+    @Inject
     @InjectPresenter
     FavoritePresenter presenter;
 
@@ -37,6 +40,14 @@ public class FavoritePage extends MvpFragment implements FavoriteContract.View {
 
     private Unbinder unbinder;
     private List<Section<URLImage>> sections;
+
+    @Override
+    protected void buildDiComponent(RepositoriesComponent repositoriesComponent) {
+        DaggerFavoriteScreenComponent.builder()
+                .repositoriesComponent(repositoriesComponent)
+                .build()
+                .inject(this);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +71,7 @@ public class FavoritePage extends MvpFragment implements FavoriteContract.View {
 
     @ProvidePresenter
     FavoritePresenter providePresenter() {
-        return new FavoritePresenter(new FavoriteImagesRepository());
+        return presenter;
     }
 
     @Override

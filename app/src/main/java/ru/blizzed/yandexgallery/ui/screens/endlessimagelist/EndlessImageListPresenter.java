@@ -5,7 +5,7 @@ import android.util.Log;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.data.model.Image;
 
 import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract.BasePresenterImpl;
 import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract.Model;
@@ -45,16 +45,13 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
         imagesDisposable = repository.getImagesObservable(imagesCount)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .doOnNext(next -> imagesCount += next.size())
+                .doOnNext(next -> toEndScrolled = false)
                 .subscribe(next -> {
-                    imagesCount += next.size();
                     getViewState().addImages(next);
-                    toEndScrolled = false;
                 }, error -> {
                     Log.e("ru.blizzed", error.toString());
-                }, () -> {
-                    getViewState().hideLoading();
-                    Log.e("ru.blizzed", "Completed");
-                });
+                }, () -> getViewState().hideLoading());
     }
 
 }

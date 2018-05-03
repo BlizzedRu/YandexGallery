@@ -2,22 +2,20 @@ package ru.blizzed.yandexgallery.ui.screens.favorite;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.data.model.Section;
+import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
-import ru.blizzed.yandexgallery.ui.screens.favorite.model.Section;
 
 public interface FavoriteContract extends BaseContract {
 
     interface Model extends BaseModel {
-        Observable<URLImage> getObservable();
-
         Flowable<List<URLImage>> getAll();
 
-        void remove(URLImage image);
+        Completable remove(URLImage image);
 
-        void add(URLImage image);
+        Completable add(URLImage image);
     }
 
     interface View extends BaseView {

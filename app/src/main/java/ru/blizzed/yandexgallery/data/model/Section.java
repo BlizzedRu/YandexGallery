@@ -1,4 +1,4 @@
-package ru.blizzed.yandexgallery.ui.screens.favorite.model;
+package ru.blizzed.yandexgallery.data.model;
 
 import java.util.ArrayList;
 import java.util.List;

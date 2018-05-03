@@ -6,11 +6,14 @@ import android.os.Bundle;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import javax.inject.Inject;
+
+import ru.blizzed.yandexgallery.data.model.FileImage;
+import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImage;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageActivity;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
 
@@ -18,10 +21,9 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
 
     private static final String KEY_FOLDER = "folder";
 
+    @Inject
     @InjectPresenter
     FolderImagePresenter presenter;
-
-    private FileImagesFolder folder;
 
     public static FolderImagesFragment newInstance(FileImagesFolder folder) {
         Bundle args = new Bundle();
@@ -33,19 +35,23 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
     }
 
     @Override
+    protected void buildDiComponent(RepositoriesComponent repositoriesComponent) {
+        FileImagesFolder folder = getArguments().getParcelable(KEY_FOLDER);
+        DaggerFolderScreenComponent.builder()
+                .filesFolder(folder)
+                .repositoriesComponent(repositoriesComponent)
+                .build()
+                .inject(this);
+    }
+
+    @Override
     public FolderImagePresenter getPresenter() {
         return presenter;
     }
 
     @ProvidePresenter
     public FolderImagePresenter providePresenter() {
-        return new FolderImagePresenter(provideModel());
-    }
-
-    @Override
-    protected EndlessImageListContract.Model<FileImage> provideModel() {
-        folder = getArguments().getParcelable(KEY_FOLDER);
-        return new FolderImagesRepository(folder);
+        return presenter;
     }
 
     @Override

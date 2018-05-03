@@ -3,7 +3,7 @@ package ru.blizzed.yandexgallery.ui.screens.feed;
 import java.util.List;
 
 import ru.blizzed.pixabaylib.params.CategoryParam;
-import ru.blizzed.yandexgallery.SelectableCategory;
+import ru.blizzed.yandexgallery.data.model.SelectableCategory;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
 
 public interface FeedContract extends BaseContract {

@@ -11,11 +11,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.data.model.Section;
+import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.ui.BaseRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListViewAdapter;
-import ru.blizzed.yandexgallery.ui.screens.favorite.model.Section;
 
 public class SectionsFavoriteViewAdapter extends BaseRecyclerViewAdapter<Section<URLImage>> {
 

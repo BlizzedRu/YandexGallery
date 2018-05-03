@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arellomobile.mvp.MvpFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
@@ -18,30 +17,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.pixabaylib.params.CategoryParam;
+import ru.blizzed.yandexgallery.App;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.SelectableCategory;
+import ru.blizzed.yandexgallery.data.model.SelectableCategory;
+import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.customs.ItemOffsetDecoration;
+import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
 import ru.blizzed.yandexgallery.ui.screens.feed.category.CategoryImagesFragment;
 
 import static ru.blizzed.yandexgallery.ui.screens.feed.CategoriesViewAdapter.KEY_SELECTION;
 
-public class FeedPage extends MvpFragment implements FeedContract.View {
+public class FeedPage extends DiMvpFragment implements FeedContract.View {
 
     public static final String TAG = "feed";
 
     @BindView(R.id.categoriesRecycler)
     RecyclerView categoriesRecycler;
 
+    @Inject
     @InjectPresenter
     FeedPresenter presenter;
 
     private CategoriesViewAdapter categoriesAdapter;
     private Map<CategoryParam.Category, Fragment> categoryPages;
     private Unbinder unbinder;
+
+    @Override
+    protected void buildDiComponent(RepositoriesComponent repositoriesComponent) {
+        DaggerFeedScreenComponent.builder()
+                .repositoriesComponent(App.getRepositoriesComponent())
+                .build()
+                .inject(this);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +69,7 @@ public class FeedPage extends MvpFragment implements FeedContract.View {
 
         unbinder = ButterKnife.bind(this, view);
 
-        categoriesAdapter = new CategoriesViewAdapter(Collections.emptyList(), presenter::onCategorySelected);
-
+        categoriesAdapter = new CategoriesViewAdapter(Collections.emptyList(), (position, item) -> presenter.onCategorySelected(position, item));
         categoriesRecycler.setAdapter(categoriesAdapter);
         categoriesRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoriesRecycler.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.dimen.images_preview_spacing));
@@ -67,7 +79,7 @@ public class FeedPage extends MvpFragment implements FeedContract.View {
 
     @ProvidePresenter
     FeedPresenter providePresenter() {
-        return new FeedPresenter(new PixabayCategoriesRepository());
+        return presenter;
     }
 
     @Override

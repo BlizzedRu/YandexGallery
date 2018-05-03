@@ -7,7 +7,7 @@ import android.view.View;
 import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.SelectableCategory;
+import ru.blizzed.yandexgallery.data.model.SelectableCategory;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.customs.CategoryView;
 

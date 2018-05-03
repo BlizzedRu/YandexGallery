@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.ButtonsMenuView;
 
@@ -37,6 +37,7 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
     ButtonsMenuView downMenu;
 
     private List<T> images;
+    private FullScreenImagePagerAdapter<T> adapter;
     private int position;
     private Unbinder unbinder;
 
@@ -54,10 +55,12 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
         toolbar.setNavigationOnClickListener(v -> this.finish());
         toolbar.setNavigationIcon(R.drawable.ic_back);
 
-        updateToolbarTitle(toolbar, position, images.size());
+        updateToolbarTitle();
 
         ViewPager viewPager = findViewById(R.id.pager);
-        viewPager.setAdapter(new FullScreenImagePagerAdapter<>(images, provideImageLoader(), this::onImageClicked));
+
+        adapter = new FullScreenImagePagerAdapter<>(images, provideImageLoader(), this::onImageClicked);
+        viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
         viewPager.setOffscreenPageLimit(5);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -68,7 +71,7 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
             @Override
             public void onPageSelected(int position) {
                 FullScreenImageActivity.this.position = position;
-                updateToolbarTitle(toolbar, position, images.size());
+                updateToolbarTitle();
             }
 
             @Override
@@ -77,6 +80,7 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
         });
 
         fillDownMenu(downMenu);
+
     }
 
     public void onImageClicked(int position, T image) {
@@ -103,8 +107,8 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
         downMenu.setOnItemClickListener(this);
     }
 
-    private void updateToolbarTitle(Toolbar toolbar, int position, int amount) {
-        toolbar.setTitle(getString(R.string.full_screen_image_title, position + 1, amount));
+    private void updateToolbarTitle() {
+        toolbar.setTitle(getString(R.string.full_screen_image_title, position + 1, images.size()));
     }
 
     @Override

@@ -5,17 +5,17 @@ import com.arellomobile.mvp.InjectViewState;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
 
 @InjectViewState
 public class FilesPresenter extends FilesContract.BasePresenterImpl<FilesContract.View> implements FilesContract.Presenter {
 
     private Disposable repositoryDisposable;
-    private FilesContract.Model repository;
+    private FilesContract.Model model;
 
-    public FilesPresenter(FilesContract.Model repository) {
-        this.repository = repository;
-        repositoryDisposable = repository.getImageFolders()
+    public FilesPresenter(FilesContract.Model model) {
+        this.model = model;
+        repositoryDisposable = model.getImageFolders()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(getViewState()::addFolder);

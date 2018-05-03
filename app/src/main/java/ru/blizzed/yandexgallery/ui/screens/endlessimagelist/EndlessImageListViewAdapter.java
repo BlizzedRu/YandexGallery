@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.Image;
+import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 

@@ -1,8 +1,8 @@
 package ru.blizzed.yandexgallery.ui.screens.files;
 
 import io.reactivex.Flowable;
+import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 
 public interface FilesContract extends BaseContract {
 

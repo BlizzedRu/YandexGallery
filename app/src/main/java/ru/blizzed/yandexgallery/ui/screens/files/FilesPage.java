@@ -9,29 +9,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arellomobile.mvp.MvpFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
+import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
 import ru.blizzed.yandexgallery.ui.screens.files.folder.FolderImagesActivity;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesRepository;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
-public class FilesPage extends MvpFragment implements FilesContract.View {
+public class FilesPage extends DiMvpFragment implements FilesContract.View {
 
     public static final String TAG = "files";
 
     @BindView(R.id.foldersRecycler)
     RecyclerView foldersRecycler;
 
+    @Inject
     @InjectPresenter
     FilesPresenter presenter;
 
@@ -40,6 +43,14 @@ public class FilesPage extends MvpFragment implements FilesContract.View {
     private List<FileImagesFolder> folderList;
 
     private Unbinder unbinder;
+
+    @Override
+    protected void buildDiComponent(RepositoriesComponent repositoriesComponent) {
+        DaggerFilesScreenComponent.builder()
+                .repositoriesComponent(repositoriesComponent)
+                .build()
+                .inject(this);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +73,7 @@ public class FilesPage extends MvpFragment implements FilesContract.View {
 
     @ProvidePresenter
     public FilesPresenter providePresenter() {
-        return new FilesPresenter(new FileImagesRepository());
+        return presenter;
     }
 
     @Override

@@ -1,13 +1,16 @@
 package ru.blizzed.yandexgallery.ui.screens.feed.category;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import javax.inject.Inject;
+
 import ru.blizzed.pixabaylib.params.CategoryParam;
-import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.data.model.URLImage;
+import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
@@ -16,15 +19,29 @@ import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageAct
 
 public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> implements EndlessImageListContract.View<URLImage> {
 
+    private static final String KEY_CATEGORY = "category";
+
+    @Inject
     @InjectPresenter
     CategoryImagesPresenter presenter;
 
-    private CategoryParam.Category category;
-
     public static CategoryImagesFragment newInstance(CategoryParam.Category category) {
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_CATEGORY, category);
+
         CategoryImagesFragment fragment = new CategoryImagesFragment();
-        fragment.category = category;
+        fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected void buildDiComponent(RepositoriesComponent repositoriesComponent) {
+        CategoryParam.Category category = (CategoryParam.Category) getArguments().getSerializable(KEY_CATEGORY);
+        DaggerCategoryFeedScreenComponent.builder()
+                .feedCategory(category)
+                .repositoriesComponent(repositoriesComponent)
+                .build()
+                .inject(this);
     }
 
     @Override
@@ -34,12 +51,7 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
 
     @ProvidePresenter
     public CategoryImagesPresenter providePresenter() {
-        return new CategoryImagesPresenter(provideModel());
-    }
-
-    @Override
-    protected EndlessImageListContract.Model<URLImage> provideModel() {
-        return new PixabayCategoryImagesRepository(category, getResources().getInteger(R.integer.images_per_request));
+        return presenter;
     }
 
     @Override

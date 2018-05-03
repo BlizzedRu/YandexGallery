@@ -4,7 +4,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.model.URLImage;
+import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 
 public class FullScreenURLImageActivity extends FullScreenImageActivity<URLImage> {

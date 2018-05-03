@@ -5,7 +5,7 @@ import com.arellomobile.mvp.InjectViewState;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ru.blizzed.yandexgallery.SelectableCategory;
+import ru.blizzed.yandexgallery.data.model.SelectableCategory;
 
 @InjectViewState
 public class FeedPresenter extends FeedContract.BasePresenterImpl<FeedContract.View> implements FeedContract.Presenter {
@@ -14,8 +14,8 @@ public class FeedPresenter extends FeedContract.BasePresenterImpl<FeedContract.V
 
     private int lastSelectedCategoryPosition = -1;
 
-    public FeedPresenter(FeedContract.Model repository) {
-        categories = Observable.fromIterable(repository.getCategories())
+    public FeedPresenter(FeedContract.Model model) {
+        categories = Observable.fromIterable(model.getCategories())
                 .map(SelectableCategory::new)
                 .toList()
                 .blockingGet();

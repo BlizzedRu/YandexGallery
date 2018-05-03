@@ -11,10 +11,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.BaseRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
-import ru.blizzed.yandexgallery.ui.screens.files.model.FileImagesFolder;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 public class ImagesFolderViewAdapter extends BaseRecyclerViewAdapter<FileImagesFolder> {
