@@ -1,6 +1,7 @@
 package ru.blizzed.yandexgallery.ui.screens.feed;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,7 +47,10 @@ public class FeedPage extends DiMvpFragment implements FeedContract.View {
 
     private CategoriesViewAdapter categoriesAdapter;
     private Map<CategoryParam.Category, Fragment> categoryPages;
+
     private Unbinder unbinder;
+
+    private CategoryParam.Category currentCategory;
 
     @Override
     protected void buildDiComponent(RepositoriesComponent repositoriesComponent) {
@@ -110,15 +114,21 @@ public class FeedPage extends DiMvpFragment implements FeedContract.View {
     }
 
     private void openPage(CategoryParam.Category category) {
-        getChildFragmentManager().beginTransaction().replace(R.id.container, getPageForCategory(category)).commit();
-    }
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
-    private Fragment getPageForCategory(CategoryParam.Category category) {
-        if (categoryPages.containsKey(category))
-            return categoryPages.get(category);
-        Fragment page = CategoryImagesFragment.newInstance(category);
-        categoryPages.put(category, page);
-        return page;
+        if (currentCategory != null)
+            transaction.hide(categoryPages.get(currentCategory));
+
+        if (categoryPages.containsKey(category)) {
+            transaction.show(categoryPages.get(category));
+        } else {
+            Fragment page = CategoryImagesFragment.newInstance(category);
+            categoryPages.put(category, page);
+            transaction.add(R.id.container, page);
+        }
+
+        currentCategory = category;
+        transaction.commit();
     }
 
 }

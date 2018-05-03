@@ -68,4 +68,8 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
         startActivityForResult(intent, FULL_SCREEN_REQUEST_CODE);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

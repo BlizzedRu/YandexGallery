@@ -23,6 +23,11 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
 
     public EndlessImageListPresenter(Model<T> repository) {
         this.repository = repository;
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
         loadMore();
     }
 

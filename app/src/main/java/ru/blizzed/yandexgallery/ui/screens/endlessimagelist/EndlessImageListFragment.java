@@ -137,6 +137,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
         unbinder.unbind();
     }
 
+
     private int getSpanCount() {
         return getResources().getInteger(OrientationUtils.get(getActivity()) == OrientationUtils.Orientation.VERTICAL
                 ? R.integer.preview_list_spans

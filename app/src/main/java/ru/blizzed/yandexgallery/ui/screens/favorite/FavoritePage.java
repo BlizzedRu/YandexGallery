@@ -27,7 +27,7 @@ import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
 
 public class FavoritePage extends DiMvpFragment implements FavoriteContract.View {
 
-    public static final String ID = "favorite";
+    public static final String TAG = "favorite";
 
     @BindView(R.id.sectionsRecycler)
     RecyclerView sectionsRecycler;
