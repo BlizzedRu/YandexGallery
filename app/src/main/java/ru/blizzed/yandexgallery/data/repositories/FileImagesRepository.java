@@ -20,12 +20,13 @@ public class FileImagesRepository {
 
     public Flowable<FileImagesFolder> getImageFolders() {
         return Flowable.create(emitter -> {
-            try {
-                File root = getRootFile();
+            File root = getRootFile();
+            if (root.listFiles() != null) {
                 handleDirectory(root, emitter);
-            } catch (NoPermissionException e) {
-                emitter.onError(e);
-            }
+                emitter.onComplete();
+            } else
+                emitter.onError(new NoPermissionException("To use android file system you must have android.permission.READ_EXTERNAL_STORAGE"));
+
         }, BackpressureStrategy.DROP);
     }
 
@@ -48,11 +49,8 @@ public class FileImagesRepository {
         }).run();
     }
 
-    private File getRootFile() throws NoPermissionException {
-        File root = Environment.getExternalStorageDirectory();
-        if (root.listFiles() == null)
-            throw new NoPermissionException("To use android file system you must have android.permission.READ_EXTERNAL_STORAGE");
-        return root;
+    private File getRootFile() {
+        return Environment.getExternalStorageDirectory();
 
     }
 

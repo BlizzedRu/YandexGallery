@@ -24,6 +24,10 @@
             android:id="@+id/noPermissions"
             layout="@layout/no_permissions"/>
 
+        <include
+            android:id="@+id/noImages"
+            layout="@layout/no_images"/>
+
     </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

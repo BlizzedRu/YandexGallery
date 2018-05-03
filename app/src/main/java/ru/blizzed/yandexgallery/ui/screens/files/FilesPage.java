@@ -47,6 +47,9 @@ public class FilesPage extends DiMvpFragment implements FilesContract.View {
     @BindView(R.id.noPermissions)
     View noPermissionsView;
 
+    @BindView(R.id.noImages)
+    View emptyMessageView;
+
     @Inject
     @InjectPresenter
     FilesPresenter presenter;
@@ -108,12 +111,12 @@ public class FilesPage extends DiMvpFragment implements FilesContract.View {
 
     @Override
     public void showEmptyMessage() {
-
+        emptyMessageView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideEmptyMessage() {
-
+        emptyMessageView.setVisibility(View.GONE);
     }
 
     @Override

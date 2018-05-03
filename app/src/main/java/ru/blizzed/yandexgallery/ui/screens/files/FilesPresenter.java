@@ -20,6 +20,8 @@ public class FilesPresenter extends FilesContract.BasePresenterImpl<FilesContrac
 
     private FilesContract.PermissionsHelper permissionsHelper;
 
+    private int foldersCount;
+
     public FilesPresenter(FilesContract.Model model) {
         this.model = model;
     }
@@ -70,16 +72,22 @@ public class FilesPresenter extends FilesContract.BasePresenterImpl<FilesContrac
     }
 
     private void loadImageFolders() {
+        foldersCount = 0;
         repositoryDisposable = model.getImageFolders()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(getViewState()::addFolder, error -> {
+                .subscribe(folder -> {
+                    getViewState().addFolder(folder);
+                    foldersCount++;
+                }, error -> {
                     if (error instanceof NoPermissionException) {
                         getViewState().hideContent();
                         getViewState().showNoPermissionsMessage();
                         if (permissionsHelper.canRequestPermissions(PERMISSION))
                             getViewState().requestPermissions(PERMISSION);
                     }
+                }, () -> {
+                    if (foldersCount == 0) getViewState().showEmptyMessage();
                 });
     }
 }

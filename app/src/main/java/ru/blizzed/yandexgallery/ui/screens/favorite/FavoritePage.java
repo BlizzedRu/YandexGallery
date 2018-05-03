@@ -32,6 +32,9 @@ public class FavoritePage extends DiMvpFragment implements FavoriteContract.View
     @BindView(R.id.sectionsRecycler)
     RecyclerView sectionsRecycler;
 
+    @BindView(R.id.noImages)
+    View emptyMessageView;
+
     @Inject
     @InjectPresenter
     FavoritePresenter presenter;
@@ -76,22 +79,22 @@ public class FavoritePage extends DiMvpFragment implements FavoriteContract.View
 
     @Override
     public void showEmptyMessage() {
-
+        emptyMessageView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideEmptyMessage() {
-
+        emptyMessageView.setVisibility(View.GONE);
     }
 
     @Override
     public void showContent() {
-
+        sectionsRecycler.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideContent() {
-
+        sectionsRecycler.setVisibility(View.GONE);
     }
 
     @Override

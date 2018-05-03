@@ -21,9 +21,10 @@ public class FavoritePresenter extends FavoriteContract.BasePresenterImpl<Favori
 
     private Disposable imagesDisposable;
 
+    private int sectionsCount;
+
     public FavoritePresenter(FavoriteContract.Model repository) {
         this.repository = repository;
-
     }
 
     private boolean isWithinOneDay(Date d1, Date d2) {
@@ -50,9 +51,18 @@ public class FavoritePresenter extends FavoriteContract.BasePresenterImpl<Favori
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
+        getViewState().hideEmptyMessage();
+        getViewState().showContent();
+
+        loadImages();
+    }
+
+    private void loadImages() {
+        sectionsCount = 0;
         imagesDisposable = repository.getAll()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .doOnNext(next -> sectionsCount++)
                 .subscribe(list -> {
                     List<Section<URLImage>> sections = new ArrayList<>();
 
@@ -74,6 +84,10 @@ public class FavoritePresenter extends FavoriteContract.BasePresenterImpl<Favori
                     }
 
                     getViewState().addSections(sections);
+                }, error -> {
+                }, () -> {
+                    if (sectionsCount == 0) getViewState().showEmptyMessage();
                 });
     }
+
 }
