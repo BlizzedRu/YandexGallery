@@ -10,4 +10,7 @@
 
     <integer name="folder_spans">1</integer>
     <integer name="folder_spans_horizontal">2</integer>
+
+    <integer name="read_external_storage_permission_request_code">123</integer>
+    <integer name="wite_external_storage_permission_request_code">456</integer>
 </resources>

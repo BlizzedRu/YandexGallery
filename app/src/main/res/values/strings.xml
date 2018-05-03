@@ -18,4 +18,8 @@
     <string name="image_menu_delete">Удалить</string>
     <string name="image_menu_download">Сохранить</string>
 
+    <string name="no_external_storage_permission_title">Просматривайте фотографии</string>
+    <string name="no_external_storage_permission_description">Чтобы просматривать фотографии и картинки с вашего устройства, разрешите приложению доступ к файлам</string>
+    <string name="no_external_storage_permission_button">Разрешить доступ к файлам</string>
+
 </resources>
