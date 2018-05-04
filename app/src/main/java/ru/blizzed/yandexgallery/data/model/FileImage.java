@@ -3,6 +3,7 @@ package ru.blizzed.yandexgallery.data.model;
 import android.os.Parcel;
 
 import java.io.File;
+import java.util.Objects;
 
 public class FileImage implements Image {
 
@@ -43,4 +44,16 @@ public class FileImage implements Image {
         dest.writeSerializable(file);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileImage fileImage = (FileImage) o;
+        return Objects.equals(file.getAbsolutePath(), fileImage.file.getAbsolutePath());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(file);
+    }
 }

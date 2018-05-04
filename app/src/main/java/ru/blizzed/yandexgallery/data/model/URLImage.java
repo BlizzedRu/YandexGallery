@@ -7,6 +7,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.util.Objects;
+
 import ru.blizzed.pixabaylib.model.PixabayImage;
 
 @Entity
@@ -36,6 +38,7 @@ public class URLImage implements Parcelable, Image {
             return new URLImage[size];
         }
     };
+
     @NonNull
     @PrimaryKey
     private String largeURL;
@@ -128,4 +131,22 @@ public class URLImage implements Parcelable, Image {
         dest.writeIntArray(new int[]{mediumWidth, mediumHeight});
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        URLImage urlImage = (URLImage) o;
+        return mediumWidth == urlImage.mediumWidth &&
+                mediumHeight == urlImage.mediumHeight &&
+                timestamp == urlImage.timestamp &&
+                Objects.equals(largeURL, urlImage.largeURL) &&
+                Objects.equals(mediumURL, urlImage.mediumURL) &&
+                Objects.equals(previewURL, urlImage.previewURL) &&
+                Objects.equals(type, urlImage.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(largeURL, mediumURL, previewURL, mediumWidth, mediumHeight, type, timestamp);
+    }
 }

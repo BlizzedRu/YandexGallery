@@ -110,6 +110,12 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     }
 
     @Override
+    public void removeImages(List<T> images) {
+        this.images.removeAll(images);
+        imagesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void showLoading() {
 
     }

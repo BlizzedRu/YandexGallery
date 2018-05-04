@@ -71,6 +71,11 @@ public class FullScreenImagePagerAdapter<T extends Image> extends RecycledPagerA
     }
 
     @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
+    }
+
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());

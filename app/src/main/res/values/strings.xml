@@ -22,4 +22,9 @@
     <string name="no_external_storage_permission_description">Чтобы просматривать фотографии и картинки с вашего устройства, разрешите приложению доступ к файлам</string>
     <string name="no_external_storage_permission_button">Разрешить доступ к файлам</string>
 
+    <string name="image_menu_delete_success">Изображение удалено</string>
+    <string name="image_menu_delete_error">Ошибка удаления</string>
+    <string name="image_menu_delete_error_permissions">Для удаления файла приложению нужны разрешения</string>
+    <string name="image_menu_delete_error_permissions_button">Настройки</string>
+
 </resources>

@@ -2,6 +2,8 @@ package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
 import android.util.Log;
 
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -42,6 +44,11 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     @Override
     public void onImageClicked(T image) {
         getViewState().openImage(image);
+    }
+
+    @Override
+    public void onImagesRemoved(List<T> images) {
+        getViewState().removeImages(images);
     }
 
     private void loadMore() {

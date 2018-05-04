@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import ru.blizzed.yandexgallery.data.model.FileImage;
@@ -16,6 +18,8 @@ import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListCont
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageActivity;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FolderImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage> {
 
@@ -68,4 +72,16 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
         startActivityForResult(intent, FULL_SCREEN_REQUEST_CODE);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == FULL_SCREEN_REQUEST_CODE) {
+                ArrayList<FileImage> removedImages = data.getParcelableArrayListExtra(FullScreenFileImageActivity.KEY_REMOVED);
+                if (removedImages != null && !removedImages.isEmpty()) {
+                    getPresenter().onImagesRemoved(removedImages);
+                }
+            }
+        }
+    }
 }
