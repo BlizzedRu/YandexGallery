@@ -27,4 +27,5 @@
     <string name="image_menu_delete_error_permissions">Для удаления файла приложению нужны разрешения</string>
     <string name="image_menu_delete_error_permissions_button">Настройки</string>
 
+    <string name="splash_images_provider">With</string>
 </resources>

@@ -17,24 +17,26 @@
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name">
+        </activity>
+        <activity android:name=".ui.screens.files.folder.FolderImagesActivity">
+        </activity>
+        <activity
+            android:name=".ui.screens.fullscreenimage.FullScreenFileImageActivity"
+            android:theme="@style/AppTheme.FullScreen">
+        </activity>
+        <activity
+            android:name=".ui.screens.fullscreenimage.FullScreenURLImageActivity"
+            android:theme="@style/AppTheme.FullScreen">
+        </activity>
+
+        <activity
+            android:name=".ui.SplashActivity"
+            android:theme="@style/AppTheme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-
-        <activity android:name=".ui.screens.files.folder.FolderImagesActivity">
-        </activity>
-
-        <activity
-            android:name=".ui.screens.fullscreenimage.FullScreenFileImageActivity"
-            android:theme="@style/AppTheme.FullScreen">
-        </activity>
-
-        <activity
-            android:name=".ui.screens.fullscreenimage.FullScreenURLImageActivity"
-            android:theme="@style/AppTheme.FullScreen">
         </activity>
 
         <provider
