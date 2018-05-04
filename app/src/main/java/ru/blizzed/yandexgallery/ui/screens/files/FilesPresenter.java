@@ -4,10 +4,13 @@ import android.Manifest;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.List;
+
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolderEvent;
 import ru.blizzed.yandexgallery.data.repositories.NoPermissionException;
 
 @InjectViewState
@@ -22,8 +25,28 @@ public class FilesPresenter extends FilesContract.BasePresenterImpl<FilesContrac
 
     private int foldersCount;
 
+    private Observer<FileImagesFolderEvent> foldersChangesObserver = new Observer<FileImagesFolderEvent>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+        }
+
+        @Override
+        public void onNext(FileImagesFolderEvent event) {
+            getViewState().updateFolder(event);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
     public FilesPresenter(FilesContract.Model model) {
         this.model = model;
+        model.subscribeToChanges(foldersChangesObserver);
     }
 
     @Override
@@ -68,26 +91,38 @@ public class FilesPresenter extends FilesContract.BasePresenterImpl<FilesContrac
     @Override
     public void onDestroy() {
         super.onDestroy();
-        repositoryDisposable.dispose();
+        if (repositoryDisposable != null)
+            repositoryDisposable.dispose();
     }
 
     private void loadImageFolders() {
-        foldersCount = 0;
-        repositoryDisposable = model.getImageFolders()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(folder -> {
-                    getViewState().addFolder(folder);
-                    foldersCount++;
-                }, error -> {
-                    if (error instanceof NoPermissionException) {
-                        getViewState().hideContent();
-                        getViewState().showNoPermissionsMessage();
-                        if (permissionsHelper.canRequestPermissions(PERMISSION))
-                            getViewState().requestPermissions(PERMISSION);
-                    }
-                }, () -> {
-                    if (foldersCount == 0) getViewState().showEmptyMessage();
-                });
+        if (model.getImageFolders().isEmpty()) {
+            foldersCount = 0;
+            repositoryDisposable = model.getImageFoldersAsync()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(next -> foldersCount++)
+                    .subscribe(getViewState()::addFolder, this::handleError, () -> {
+                        if (foldersCount == 0) getViewState().showEmptyMessage();
+                    });
+        } else {
+            List<FileImagesFolder> folders = model.getImageFolders();
+            if (folders.isEmpty()) {
+                getViewState().showEmptyMessage();
+                return;
+            }
+
+            getViewState().showContent();
+            getViewState().setFolders(folders);
+        }
     }
+
+    private void handleError(Throwable error) {
+        if (error instanceof NoPermissionException) {
+            getViewState().hideContent();
+            getViewState().showNoPermissionsMessage();
+            if (permissionsHelper.canRequestPermissions(PERMISSION))
+                getViewState().requestPermissions(PERMISSION);
+        }
+    }
+
 }

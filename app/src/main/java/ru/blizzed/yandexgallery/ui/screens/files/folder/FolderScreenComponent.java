@@ -2,7 +2,7 @@ package ru.blizzed.yandexgallery.ui.screens.files.folder;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 import ru.blizzed.yandexgallery.di.ScreensScope;
 import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.screens.files.FilesScreenModule;

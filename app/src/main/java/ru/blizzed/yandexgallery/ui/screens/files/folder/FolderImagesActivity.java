@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.widget.Toolbar;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 
 public class FolderImagesActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package ru.blizzed.yandexgallery.data.model;
+package ru.blizzed.yandexgallery.data.model.fileimage;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,17 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileImagesFolder implements Parcelable {
-
-    private String title;
-
-    private List<FileImage> imagesList;
-
-    private File file;
-
-    public FileImagesFolder(File file) {
-        this.file = file;
-        imagesList = new ArrayList<>();
-    }
 
     public static final Parcelable.Creator<FileImagesFolder> CREATOR = new Parcelable.Creator<FileImagesFolder>() {
 
@@ -38,6 +27,20 @@ public class FileImagesFolder implements Parcelable {
         }
     };
 
+    private String title;
+
+    private List<FileImage> imagesList;
+
+    private File file;
+
+    private FileImagesFolder() {
+    }
+
+    public FileImagesFolder(File file) {
+        this.file = file;
+        imagesList = new ArrayList<>();
+    }
+
     public String getTitle() {
         return file.getName();
     }
@@ -46,15 +49,16 @@ public class FileImagesFolder implements Parcelable {
         return imagesList;
     }
 
-    private FileImagesFolder() {
-    }
-
     public File getFile() {
         return file;
     }
 
     public void addImage(FileImage image) {
         imagesList.add(0, image);
+    }
+
+    public void removeImage(FileImage image) {
+        imagesList.remove(image);
     }
 
     @Override

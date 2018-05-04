@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.data.model.FileImage;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
 
 public class ImagePreviewViewAdapter extends RecyclerView.Adapter<ImagePreviewViewAdapter.ViewHolder> {
 

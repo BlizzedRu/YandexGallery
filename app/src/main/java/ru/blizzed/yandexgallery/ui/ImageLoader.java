@@ -9,9 +9,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.data.model.FileImage;
 import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.data.model.URLImage;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
 
 public abstract class ImageLoader<T extends Image> {
 

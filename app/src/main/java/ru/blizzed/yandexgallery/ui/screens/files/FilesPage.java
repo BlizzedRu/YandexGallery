@@ -27,7 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolderEvent;
 import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
 import ru.blizzed.yandexgallery.ui.screens.files.folder.FolderImagesActivity;
@@ -137,10 +138,25 @@ public class FilesPage extends DiMvpFragment implements FilesContract.View {
     }
 
     @Override
+    public void setFolders(List<FileImagesFolder> folders) {
+        int oldSize = folderList.size();
+        folderList.addAll(folders);
+        folderAdapter.notifyItemRangeInserted(oldSize, folderList.size() - 1);
+    }
+
+    @Override
     public void openFolder(FileImagesFolder folder) {
         Intent intent = new Intent(getActivity(), FolderImagesActivity.class);
         intent.putExtra(FolderImagesActivity.KEY_FOLDER, folder);
         startActivity(intent);
+    }
+
+    @Override
+    public void updateFolder(FileImagesFolderEvent event) {
+        FileImagesFolder folder = event.getFolder();
+        int position = folderList.indexOf(folder);
+        folderList.set(position, folder);
+        folderAdapter.notifyItemChanged(position);
     }
 
     @Override

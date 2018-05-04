@@ -4,8 +4,8 @@ import javax.inject.Inject;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.blizzed.yandexgallery.data.model.FileImage;
-import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 import ru.blizzed.yandexgallery.data.repositories.FileImagesRepository;
 import ru.blizzed.yandexgallery.di.ScreensScope;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;

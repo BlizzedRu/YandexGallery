@@ -1,7 +1,11 @@
 package ru.blizzed.yandexgallery.ui.screens.files;
 
+import java.util.List;
+
 import io.reactivex.Flowable;
-import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import io.reactivex.Observer;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolderEvent;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
 
 public interface FilesContract extends BaseContract {
@@ -13,7 +17,11 @@ public interface FilesContract extends BaseContract {
     }
 
     interface Model extends BaseModel {
-        Flowable<FileImagesFolder> getImageFolders();
+        Flowable<FileImagesFolder> getImageFoldersAsync();
+
+        List<FileImagesFolder> getImageFolders();
+
+        void subscribeToChanges(Observer<FileImagesFolderEvent> observer);
     }
 
     interface View extends BaseView {
@@ -27,7 +35,11 @@ public interface FilesContract extends BaseContract {
 
         void addFolder(FileImagesFolder folder);
 
+        void setFolders(List<FileImagesFolder> folders);
+
         void openFolder(FileImagesFolder folder);
+
+        void updateFolder(FileImagesFolderEvent event);
 
         void showNoPermissionsMessage();
 

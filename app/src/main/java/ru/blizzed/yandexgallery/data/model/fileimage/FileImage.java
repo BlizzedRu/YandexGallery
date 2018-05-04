@@ -1,21 +1,13 @@
-package ru.blizzed.yandexgallery.data.model;
+package ru.blizzed.yandexgallery.data.model.fileimage;
 
 import android.os.Parcel;
 
 import java.io.File;
 import java.util.Objects;
 
+import ru.blizzed.yandexgallery.data.model.Image;
+
 public class FileImage implements Image {
-
-    private File file;
-
-    public FileImage(File file) {
-        this.file = file;
-    }
-
-    public File getFile() {
-        return file;
-    }
 
     final static Creator<FileImage> CREATOR = new Creator<FileImage>() {
         @Override
@@ -28,6 +20,15 @@ public class FileImage implements Image {
             return new FileImage[0];
         }
     };
+    private File file;
+
+    public FileImage(File file) {
+        this.file = file;
+    }
+
+    public File getFile() {
+        return file;
+    }
 
     @Override
     public String getMediumURL() {

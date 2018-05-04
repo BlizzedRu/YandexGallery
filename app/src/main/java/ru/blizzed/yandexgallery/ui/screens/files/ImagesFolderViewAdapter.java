@@ -11,7 +11,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.data.model.FileImagesFolder;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.BaseRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.ItemClickableRecyclerViewAdapter;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;

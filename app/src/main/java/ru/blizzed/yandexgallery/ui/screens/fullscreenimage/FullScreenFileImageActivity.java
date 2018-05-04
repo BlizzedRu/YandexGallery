@@ -15,7 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.data.model.FileImage;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 
 public class FullScreenFileImageActivity extends FullScreenImageActivity<FileImage> {
