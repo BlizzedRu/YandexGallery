@@ -70,29 +70,33 @@ public class FullScreenURLImageActivity extends FullScreenImageActivity<URLImage
     }
 
     private void addToFavorite() {
-        dispose();
+        onFavoriteChange(true);
         currentDisposable = App.getRepositoriesComponent()
                 .favoriteImagesRepository()
                 .add(getCurrentImage())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> onFavoriteChangeSuccess(true), this::onFavoriteError);
+                .doOnError(e -> onFavoriteError(e, true))
+                .subscribe();
     }
 
     private void removeFromFavorite() {
-        dispose();
+        onFavoriteChange(false);
         currentDisposable = App.getRepositoriesComponent()
                 .favoriteImagesRepository()
                 .remove(getCurrentImage())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> onFavoriteChangeSuccess(false), this::onFavoriteError);
+                .doOnError(e -> onFavoriteError(e, false))
+                .subscribe();
     }
 
-    private void onFavoriteChangeSuccess(boolean behavior) {
+    private void onFavoriteChange(boolean behavior) {
+        dispose();
         getCurrentImage().setFavorite(behavior);
         updateFavoriteState(true);
     }
 
-    private void onFavoriteError(Throwable e) {
+    private void onFavoriteError(Throwable e, boolean behavior) {
+        onFavoriteChange(!behavior);
         Log.e("ru.blizzed.yandex", e.toString());
     }
 
