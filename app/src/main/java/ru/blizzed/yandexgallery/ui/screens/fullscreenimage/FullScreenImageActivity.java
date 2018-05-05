@@ -31,7 +31,7 @@ import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.ButtonsMenuView;
 import ru.blizzed.yandexgallery.utils.PermissionsUtils;
 
-public abstract class FullScreenImageActivity<T extends Image> extends Activity implements ButtonsMenuView.OnItemClickListener {
+public abstract class FullScreenImageActivity<T extends Image> extends Activity implements ButtonsMenuView.OnItemClickListener, ViewPager.OnPageChangeListener {
 
     public static final String KEY_IMAGES = "images";
     public static final String KEY_POSITION = "position";
@@ -44,11 +44,14 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
 
     @BindView(R.id.downMenu)
     ButtonsMenuView downMenu;
+
+    @BindView(R.id.pager)
+    ViewPager viewPager;
+
     protected List<T> images;
     protected FullScreenImagePagerAdapter<T> adapter;
     protected int position;
-    @BindView(R.id.pager)
-    ViewPager viewPager;
+
     private Unbinder unbinder;
 
     private boolean isToolbarVisible = true;
@@ -72,24 +75,24 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
         viewPager.setOffscreenPageLimit(5);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                FullScreenImageActivity.this.position = position;
-                updateToolbarTitle();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        viewPager.addOnPageChangeListener(this);
 
         fillDownMenu(downMenu);
 
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        FullScreenImageActivity.this.position = position;
+        updateToolbarTitle();
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 
     public void onImageClicked(int position, T image) {
@@ -105,23 +108,6 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
 
     protected T getCurrentImage() {
         return images.get(position);
-    }
-
-    private void fillDownMenu(ButtonsMenuView downMenu) {
-        PopupMenu p = new PopupMenu(this, null);
-        Menu menu = p.getMenu();
-        getMenuInflater().inflate(getDownMenuRes(), menu);
-        MenuItem[] items = new MenuItem[menu.size()];
-        for (int i = 0; i < menu.size(); i++) {
-            items[i] = menu.getItem(i);
-        }
-
-        downMenu.setItems(items);
-        downMenu.setOnItemClickListener(this);
-    }
-
-    private void updateToolbarTitle() {
-        toolbar.setTitle(getString(R.string.full_screen_image_title, position + 1, images.size()));
     }
 
     protected Intent getShareIntent(String pathToImage) {
@@ -166,6 +152,23 @@ public abstract class FullScreenImageActivity<T extends Image> extends Activity 
         if (resultIntent == null)
             resultIntent = new Intent();
         resultIntent.putExtras(extras);
+    }
+
+    private void fillDownMenu(ButtonsMenuView downMenu) {
+        PopupMenu p = new PopupMenu(this, null);
+        Menu menu = p.getMenu();
+        getMenuInflater().inflate(getDownMenuRes(), menu);
+        MenuItem[] items = new MenuItem[menu.size()];
+        for (int i = 0; i < menu.size(); i++) {
+            items[i] = menu.getItem(i);
+        }
+
+        downMenu.setItems(items);
+        downMenu.setOnItemClickListener(this);
+    }
+
+    private void updateToolbarTitle() {
+        toolbar.setTitle(getString(R.string.full_screen_image_title, position + 1, images.size()));
     }
 
     @Override

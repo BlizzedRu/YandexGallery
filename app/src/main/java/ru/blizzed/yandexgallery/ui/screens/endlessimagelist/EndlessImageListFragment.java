@@ -32,6 +32,9 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     @BindView(R.id.imagesRecycler)
     RecyclerView imagesRecycler;
 
+    @BindView(R.id.noImages)
+    View emptyMessageView;
+
     private EndlessImageListViewAdapter<T> imagesAdapter;
     private ArrayList<T> images;
     private Unbinder unbinder;
@@ -80,22 +83,22 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
 
     @Override
     public void showEmptyMessage() {
-
+        emptyMessageView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideEmptyMessage() {
-
+        emptyMessageView.setVisibility(View.GONE);
     }
 
     @Override
     public void showContent() {
-
+        imagesRecycler.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideContent() {
-
+        imagesRecycler.setVisibility(View.GONE);
     }
 
     protected void scrollTo(int position) {
@@ -143,8 +146,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
         unbinder.unbind();
     }
 
-
-    private int getSpanCount() {
+    protected int getSpanCount() {
         return getResources().getInteger(OrientationUtils.get(getActivity()) == OrientationUtils.Orientation.VERTICAL
                 ? R.integer.preview_list_spans
                 : R.integer.preview_list_spans_horizontal

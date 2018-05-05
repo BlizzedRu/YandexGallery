@@ -3,6 +3,7 @@ package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.mvp.BaseContract;
 
@@ -11,7 +12,7 @@ public interface EndlessImageListContract extends BaseContract {
     interface Model<T extends Image> extends BaseModel {
         Observable<List<T>> getImagesObservable(int offset);
 
-        boolean hasNextImages();
+        Single<Boolean> hasNextImages(int alreadyLoaded);
     }
 
     interface View<T extends Image> extends BaseView {

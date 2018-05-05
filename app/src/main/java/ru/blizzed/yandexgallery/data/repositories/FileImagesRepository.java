@@ -20,7 +20,6 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
@@ -57,8 +56,7 @@ public class FileImagesRepository {
     public Flowable<FileImagesFolder> asyncScan() {
         folders = new HashMap<>();
         return getImageFolders()
-                .doOnNext(this::addFolderObserver)
-                .subscribeOn(Schedulers.io());
+                .doOnNext(this::addFolderObserver);
     }
 
     public List<FileImagesFolder> getFolders() {

@@ -3,6 +3,7 @@ package ru.blizzed.yandexgallery.ui.screens.files.folder;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
@@ -21,8 +22,8 @@ public class FolderImagesModel implements EndlessImageListContract.Model<FileIma
     }
 
     @Override
-    public boolean hasNextImages() {
-        return false;
+    public Single<Boolean> hasNextImages(int alreadyLoaded) {
+        return Single.just(false);
     }
 
 }

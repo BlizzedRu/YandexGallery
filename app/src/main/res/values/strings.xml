@@ -2,7 +2,7 @@
     <string name="app_name">YandexGallery</string>
     <string name="page_feed_title">Лента</string>
     <string name="page_files_title">Файлы</string>
-    <string name="page_favorite_title">Любимое</string>
+    <string name="page_favorite_title">Избранное</string>
 
     <plurals name="folder_images_description">
         <item quantity="one">%1$d фотография</item>

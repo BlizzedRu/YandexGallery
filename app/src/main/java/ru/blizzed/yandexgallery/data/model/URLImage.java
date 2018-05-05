@@ -19,6 +19,8 @@ public class URLImage implements Parcelable, Image {
         @Override
         public URLImage createFromParcel(Parcel source) {
             URLImage image = new URLImage();
+            image.setId(source.readLong());
+
             String[] stringData = new String[4];
             source.readStringArray(stringData);
             image.setLargeURL(stringData[0]);
@@ -30,6 +32,10 @@ public class URLImage implements Parcelable, Image {
             source.readIntArray(intData);
             image.setMediumWidth(intData[0]);
             image.setMediumHeight(intData[1]);
+
+            boolean[] booleanData = new boolean[1];
+            source.readBooleanArray(booleanData);
+            image.setFavorite(booleanData[0]);
             return image;
         }
 
@@ -39,18 +45,20 @@ public class URLImage implements Parcelable, Image {
         }
     };
 
-    @NonNull
     @PrimaryKey
+    private long id;
     private String largeURL;
     private String mediumURL;
     private String previewURL;
     private int mediumWidth;
     private int mediumHeight;
     private String type;
-    private long timestamp;
+
+    private boolean isFavorite = false;
 
     @Ignore
     public URLImage(PixabayImage pixabayImage) {
+        id = pixabayImage.getId();
         largeURL = pixabayImage.getLargeImageURL();
         mediumURL = pixabayImage.getWebformatURL();
         previewURL = pixabayImage.getPreviewURL();
@@ -62,7 +70,14 @@ public class URLImage implements Parcelable, Image {
     public URLImage() {
     }
 
-    @NonNull
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getLargeURL() {
         return largeURL;
     }
@@ -71,7 +86,6 @@ public class URLImage implements Parcelable, Image {
         this.largeURL = largeURL;
     }
 
-    @Override
     public String getMediumURL() {
         return mediumURL;
     }
@@ -112,12 +126,12 @@ public class URLImage implements Parcelable, Image {
         this.type = type;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public boolean isFavorite() {
+        return isFavorite;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 
     @Override
@@ -127,8 +141,10 @@ public class URLImage implements Parcelable, Image {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeStringArray(new String[]{largeURL, mediumURL, previewURL, type});
         dest.writeIntArray(new int[]{mediumWidth, mediumHeight});
+        dest.writeBooleanArray(new boolean[]{isFavorite});
     }
 
     @Override
@@ -136,17 +152,11 @@ public class URLImage implements Parcelable, Image {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         URLImage urlImage = (URLImage) o;
-        return mediumWidth == urlImage.mediumWidth &&
-                mediumHeight == urlImage.mediumHeight &&
-                timestamp == urlImage.timestamp &&
-                Objects.equals(largeURL, urlImage.largeURL) &&
-                Objects.equals(mediumURL, urlImage.mediumURL) &&
-                Objects.equals(previewURL, urlImage.previewURL) &&
-                Objects.equals(type, urlImage.type);
+        return id == urlImage.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(largeURL, mediumURL, previewURL, mediumWidth, mediumHeight, type, timestamp);
+        return Objects.hash(id, largeURL, mediumURL, previewURL, mediumWidth, mediumHeight, type);
     }
 }

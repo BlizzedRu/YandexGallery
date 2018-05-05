@@ -7,7 +7,7 @@ import dagger.Module;
 import dagger.Provides;
 import ru.blizzed.yandexgallery.data.GalleryDatabase;
 import ru.blizzed.yandexgallery.data.dao.FavoriteDAO;
-import ru.blizzed.yandexgallery.data.repositories.DBImagesRepository;
+import ru.blizzed.yandexgallery.data.repositories.FavoriteImagesRepository;
 import ru.blizzed.yandexgallery.di.AppContext;
 import ru.blizzed.yandexgallery.di.YandexGalleryScope;
 
@@ -16,8 +16,8 @@ public class DBImagesRepositoryModule {
 
     @YandexGalleryScope
     @Provides
-    DBImagesRepository provideRepository(FavoriteDAO favoriteDAO) {
-        return new DBImagesRepository(favoriteDAO);
+    FavoriteImagesRepository provideRepository(FavoriteDAO favoriteDAO) {
+        return new FavoriteImagesRepository(favoriteDAO);
     }
 
     @Provides

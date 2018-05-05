@@ -16,15 +16,15 @@ import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageL
 
 public class EndlessImageListPresenter<T extends Image> extends BasePresenterImpl<View<T>> implements Presenter<T> {
 
-    private Model<T> repository;
+    private Model<T> model;
 
     private Disposable imagesDisposable;
 
     private int imagesCount = 0;
     private boolean toEndScrolled = false;
 
-    public EndlessImageListPresenter(Model<T> repository) {
-        this.repository = repository;
+    public EndlessImageListPresenter(Model<T> model) {
+        this.model = model;
     }
 
     @Override
@@ -37,7 +37,12 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     public void onDownScrolled(int lastVisibleItemPosition) {
         if (!toEndScrolled && imagesCount - lastVisibleItemPosition < 10) {
             toEndScrolled = true;
-            loadMore();
+            Disposable disposable = model.hasNextImages(imagesCount)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(has -> {
+                        if (has) loadMore();
+                    }, this::onErrorOccurred);
         }
     }
 
@@ -52,18 +57,38 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     }
 
     private void loadMore() {
-        if (imagesDisposable != null && !imagesDisposable.isDisposed()) imagesDisposable.dispose();
+        getViewState().hideEmptyMessage();
         getViewState().showLoading();
-        imagesDisposable = repository.getImagesObservable(imagesCount)
+
+        imagesDisposable = model.getImagesObservable(imagesCount)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .doOnNext(next -> imagesCount += next.size())
                 .doOnNext(next -> toEndScrolled = false)
-                .subscribe(next -> {
-                    getViewState().addImages(next);
-                }, error -> {
-                    Log.e("ru.blizzed", error.toString());
-                }, () -> getViewState().hideLoading());
+                .subscribe(this::onNextImagesLoaded, this::onErrorOccurred);
+    }
+
+    protected void onNextImagesLoaded(List<T> images) {
+        if (imagesDisposable != null && !imagesDisposable.isDisposed()) imagesDisposable.dispose();
+        getViewState().addImages(images);
+        getViewState().hideLoading();
+        getViewState().showContent();
+        imagesCount += images.size();
+        checkForEmpty();
+    }
+
+    protected void onImagesDeleted(List<T> images) {
+        getViewState().removeImages(images);
+        imagesCount -= images.size();
+        checkForEmpty();
+    }
+
+    protected void checkForEmpty() {
+        if (imagesCount == 0) getViewState().showEmptyMessage();
+        else getViewState().hideEmptyMessage();
+    }
+
+    private void onErrorOccurred(Throwable error) {
+        Log.e("ru.blizzed", error.toString());
     }
 
 }

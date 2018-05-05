@@ -6,10 +6,11 @@ import dagger.Component;
 import dagger.android.AndroidInjectionModule;
 import dagger.android.AndroidInjector;
 import ru.blizzed.yandexgallery.App;
-import ru.blizzed.yandexgallery.data.repositories.DBImagesRepository;
+import ru.blizzed.yandexgallery.data.repositories.FavoriteImagesRepository;
 import ru.blizzed.yandexgallery.data.repositories.FileImagesRepository;
 import ru.blizzed.yandexgallery.data.repositories.PixabayImagesRepository;
 import ru.blizzed.yandexgallery.di.AppContext;
+import ru.blizzed.yandexgallery.di.ImagesPerRequest;
 import ru.blizzed.yandexgallery.di.YandexGalleryScope;
 import ru.blizzed.yandexgallery.di.modules.ContextModule;
 import ru.blizzed.yandexgallery.di.modules.DBImagesRepositoryModule;
@@ -30,10 +31,12 @@ public interface RepositoriesComponent extends AndroidInjector<App> {
 
     PixabayImagesRepository pixabayImagesRepository();
 
-    DBImagesRepository dbImagesRepository();
+    FavoriteImagesRepository favoriteImagesRepository();
 
     @AppContext
     Context context();
 
+    @ImagesPerRequest
+    int imagesPerRequest();
 
 }

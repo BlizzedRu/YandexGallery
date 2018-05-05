@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import dagger.Module;
 import dagger.Provides;
 import ru.blizzed.pixabaylib.params.CategoryParam;
+import ru.blizzed.yandexgallery.data.repositories.FavoriteImagesRepository;
 import ru.blizzed.yandexgallery.data.repositories.PixabayImagesRepository;
 import ru.blizzed.yandexgallery.di.ScreensScope;
 import ru.blizzed.yandexgallery.ui.screens.feed.category.CategoryImagesModel;
@@ -37,8 +38,10 @@ public class FeedScreenModule {
 
     @ScreensScope
     @Provides
-    CategoryImagesModel provideCategoryModel(PixabayImagesRepository repository, CategoryParam.Category category) {
-        return new CategoryImagesModel(repository, category);
+    CategoryImagesModel provideCategoryModel(PixabayImagesRepository repository,
+                                             FavoriteImagesRepository favoriteRepository,
+                                             CategoryParam.Category category) {
+        return new CategoryImagesModel(repository, favoriteRepository, category);
     }
 
 }

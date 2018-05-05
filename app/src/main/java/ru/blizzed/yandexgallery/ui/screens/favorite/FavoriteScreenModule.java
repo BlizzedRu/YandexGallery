@@ -4,7 +4,8 @@ import javax.inject.Inject;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.blizzed.yandexgallery.data.repositories.DBImagesRepository;
+import ru.blizzed.yandexgallery.data.repositories.FavoriteImagesRepository;
+import ru.blizzed.yandexgallery.di.ImagesPerRequest;
 import ru.blizzed.yandexgallery.di.ScreensScope;
 
 @Module
@@ -16,13 +17,13 @@ public class FavoriteScreenModule {
 
     @ScreensScope
     @Provides
-    FavoriteContract.Model provideModel(DBImagesRepository repository) {
-        return new FavoriteImagesModel(repository);
+    FavoriteImagesModel provideModel(FavoriteImagesRepository repository, @ImagesPerRequest int perRequest) {
+        return new FavoriteImagesModel(repository, perRequest);
     }
 
     @ScreensScope
     @Provides
-    FavoritePresenter providePresenter(FavoriteContract.Model model) {
+    FavoritePresenter providePresenter(FavoriteImagesModel model) {
         return new FavoritePresenter(model);
     }
 

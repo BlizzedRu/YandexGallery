@@ -12,12 +12,11 @@ import ru.blizzed.pixabaylib.params.CategoryParam;
 import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
-import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageActivity;
 
-public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> implements EndlessImageListContract.View<URLImage> {
+public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> implements CategoryImagesContract.View {
 
     private static final String KEY_CATEGORY = "category";
 
@@ -52,6 +51,11 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
     @ProvidePresenter
     public CategoryImagesPresenter providePresenter() {
         return presenter;
+    }
+
+    @Override
+    public void onImageFavoriteStateChanged(URLImage image, boolean isFavorite) {
+        //getImages().get(getImages().indexOf(image)).setFavorite(isFavorite);
     }
 
     @Override
