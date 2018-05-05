@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="ButtonsMenuView">
+        <attr name="colorActive" format="color"/>
+        <attr name="colorInactive" format="color"/>
+    </declare-styleable>
+
 </resources>
