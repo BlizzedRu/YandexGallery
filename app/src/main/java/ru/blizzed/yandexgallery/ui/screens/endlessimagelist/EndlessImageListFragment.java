@@ -1,7 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,9 +26,11 @@ import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 import static android.app.Activity.RESULT_OK;
 
-public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFragment implements EndlessImageListContract.View<T>, DialogInterface.OnDismissListener {
+public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFragment implements EndlessImageListContract.View<T>, FullScreenImageDialogFragment.OnCloseListener {
 
     public static final int FULL_SCREEN_REQUEST_CODE = 2324423;
+
+    private static final String KEY_SCROLL_POSITION = "scroll_position";
 
     @BindView(R.id.imagesRecycler)
     RecyclerView imagesRecycler;
@@ -43,10 +44,16 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
 
     private DialogFragment fullScreenImageDialog;
 
+    private int firstVisibleImagePosition = 0;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         images = new ArrayList<>();
+
+        if (savedInstanceState != null) {
+            firstVisibleImagePosition = savedInstanceState.getInt(KEY_SCROLL_POSITION);
+        }
     }
 
     @Nullable
@@ -71,8 +78,13 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0)
                     getPresenter().onDownScrolled(layoutManager.findLastVisibleItemPosition());
+
+                firstVisibleImagePosition = layoutManager.findFirstVisibleItemPosition();
             }
         });
+
+        scrollTo(firstVisibleImagePosition);
+        imagesAdapter.notifyDataSetChanged();
 
         return view;
     }
@@ -109,7 +121,8 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
         imagesRecycler.setVisibility(View.GONE);
     }
 
-    protected void scrollTo(int position) {
+    @Override
+    public void scrollTo(int position) {
         imagesRecycler.scrollToPosition(position);
     }
 
@@ -156,8 +169,8 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        getPresenter().onImageClosed();
+    public void onClose(DialogFragment dialog, int position) {
+        getPresenter().onImageClosed(position);
     }
 
     /* Catching closed fullscreen image activity for scrolling to the last position */
@@ -176,6 +189,12 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_SCROLL_POSITION, firstVisibleImagePosition);
     }
 
     protected int getSpanCount() {

@@ -47,8 +47,9 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     }
 
     @Override
-    public void onImageClosed() {
+    public void onImageClosed(int position) {
         getViewState().closeImage();
+        getViewState().scrollTo(position);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     }
 
     protected void onNextImagesLoaded(List<T> images) {
-        if (imagesDisposable != null && !imagesDisposable.isDisposed()) imagesDisposable.dispose();
+        dispose();
         getViewState().addImages(images);
         getViewState().hideLoading();
         getViewState().showContent();
@@ -93,7 +94,12 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     }
 
     private void onErrorOccurred(Throwable error) {
+        dispose();
         Logger.e(error, error.getMessage());
+    }
+
+    private void dispose() {
+        if (imagesDisposable != null && !imagesDisposable.isDisposed()) imagesDisposable.dispose();
     }
 
 }

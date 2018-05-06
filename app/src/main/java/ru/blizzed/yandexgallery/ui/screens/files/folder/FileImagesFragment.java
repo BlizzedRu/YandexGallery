@@ -18,6 +18,7 @@ import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageDi
 
 public class FileImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage>, OnFileImageRemovedListener {
 
+    public static final String TAG = "folder_fragment";
     private static final String KEY_FOLDER = "folder";
 
     @Inject

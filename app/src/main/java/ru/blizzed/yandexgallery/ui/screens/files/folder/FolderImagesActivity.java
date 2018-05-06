@@ -34,8 +34,13 @@ public class FolderImagesActivity extends Activity implements OnFileImageRemoved
             actionBar.setTitle(folder.getTitle());
         }
 
-        fragment = FileImagesFragment.newInstance(folder);
-        getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        fragment = (FileImagesFragment) getFragmentManager().findFragmentByTag(FileImagesFragment.TAG);
+        if (fragment == null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, FileImagesFragment.newInstance(folder), FileImagesFragment.TAG)
+                    .commit();
+        }
 
     }
 

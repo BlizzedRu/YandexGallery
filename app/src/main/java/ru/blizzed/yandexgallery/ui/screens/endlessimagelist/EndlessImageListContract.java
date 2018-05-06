@@ -26,6 +26,8 @@ public interface EndlessImageListContract extends BaseContract {
 
         void addImages(List<T> images);
 
+        void removeImages(List<T> images);
+
         void showLoading();
 
         void hideLoading();
@@ -34,13 +36,14 @@ public interface EndlessImageListContract extends BaseContract {
 
         void closeImage();
 
-        void removeImages(List<T> images);
+        void scrollTo(int position);
+
     }
 
     interface Presenter<T extends Image> extends BasePresenter {
         void onDownScrolled(int lastVisibleItemPosition);
 
-        void onImageClosed();
+        void onImageClosed(int position);
 
         void onImageClicked(T image);
 

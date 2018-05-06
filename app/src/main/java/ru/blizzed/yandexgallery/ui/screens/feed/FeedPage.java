@@ -1,6 +1,7 @@
 package ru.blizzed.yandexgallery.ui.screens.feed;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,9 +15,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -46,7 +45,6 @@ public class FeedPage extends DiMvpFragment implements FeedContract.View {
     FeedPresenter presenter;
 
     private CategoriesViewAdapter categoriesAdapter;
-    private Map<CategoryParam.Category, Fragment> categoryPages;
 
     private Unbinder unbinder;
 
@@ -63,7 +61,6 @@ public class FeedPage extends DiMvpFragment implements FeedContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        categoryPages = new HashMap<>();
     }
 
     @Nullable
@@ -114,18 +111,18 @@ public class FeedPage extends DiMvpFragment implements FeedContract.View {
     }
 
     private void openPage(CategoryParam.Category category) {
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getChildFragmentManager();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         if (currentCategory != null)
-            transaction.hide(categoryPages.get(currentCategory));
+            transaction.hide(fragmentManager.findFragmentByTag(currentCategory.name()));
 
-        if (categoryPages.containsKey(category)) {
-            transaction.show(categoryPages.get(category));
-        } else {
-            Fragment page = CategoryImagesFragment.newInstance(category);
-            categoryPages.put(category, page);
-            transaction.add(R.id.container, page);
-        }
+        Fragment categoryFragment = fragmentManager.findFragmentByTag(category.name());
+        if (categoryFragment != null) {
+            transaction.show(categoryFragment);
+        } else
+            transaction.add(R.id.container, CategoryImagesFragment.newInstance(category), category.name());
 
         currentCategory = category;
         transaction.commit();

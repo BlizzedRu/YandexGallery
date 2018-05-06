@@ -52,7 +52,8 @@ public class CategoryImagesModel implements CategoryImagesContract.Model {
                                         image.setFavorite(imgs.get(imgs.indexOf(image)).isFavorite());
                                 }
                             }, error -> Logger.e(error, "With getting favorites from DB"));
-                });
+                })
+                .cache();
     }
 
     @Override

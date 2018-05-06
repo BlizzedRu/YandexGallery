@@ -47,6 +47,15 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
     public static final String KEY_POSITION = "position";
     public static final String KEY_REQUEST_CODE = "request_code";
 
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment instanceof OnCloseListener) {
+            ((OnCloseListener) parentFragment).onClose(this, position);
+        }
+    }
+
     private static final int PERMISSIONS_SETTINGS_REQUEST_CODE = 808;
     protected static final String PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -250,13 +259,8 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
         downMenu.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onDismiss(final DialogInterface dialog) {
-        super.onDismiss(dialog);
-        Fragment parentFragment = getParentFragment();
-        if (parentFragment instanceof DialogInterface.OnDismissListener) {
-            ((DialogInterface.OnDismissListener) parentFragment).onDismiss(dialog);
-        }
+    public interface OnCloseListener {
+        void onClose(DialogFragment dialogFragment, int position);
     }
 
     @Override

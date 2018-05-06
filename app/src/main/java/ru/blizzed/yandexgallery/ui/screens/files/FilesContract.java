@@ -1,5 +1,8 @@
 package ru.blizzed.yandexgallery.ui.screens.files;
 
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
+
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -37,6 +40,7 @@ public interface FilesContract extends BaseContract {
 
         void setFolders(List<FileImagesFolder> folders);
 
+        @StateStrategyType(OneExecutionStateStrategy.class)
         void openFolder(FileImagesFolder folder);
 
         void updateFolder(FileImagesFolderEvent event);
