@@ -128,11 +128,10 @@ public class FullScreenURLImageDialogFragment extends FullScreenImageDialogFragm
     }
 
     private void saveFile() {
-        File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         addDisposable(Completable
                 .fromAction(() -> {
                     File cachedImageFile = GlideUtils.getFileFromImageURL(getActivity(), getCurrentImage().getLargeURL());
-                    File imageFile = new File(String.format("%s/%s.jpg", downloads.getAbsolutePath(), getCurrentImage().getId()));
+                    File imageFile = new File(String.format("%s/%s.jpg", getDownloadsDir().getAbsolutePath(), getCurrentImage().getId()));
                     FileUtils.copy(cachedImageFile, imageFile);
                 })
                 .subscribeOn(Schedulers.io())
@@ -142,12 +141,16 @@ public class FullScreenURLImageDialogFragment extends FullScreenImageDialogFragm
     }
 
     private void onSaveSuccess() {
-        createSnackbar(R.string.image_menu_save_success).show();
+        createSnackbar(getString(R.string.image_menu_save_success, getDownloadsDir().getName())).show();
     }
 
     private void onSaveError(Throwable e) {
         createSnackbar(R.string.image_menu_save_error).show();
         Log.e("ru.blizzed.yandex", e.toString());
+    }
+
+    private File getDownloadsDir() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
     }
 
     private void dispose(Disposable disposable) {

@@ -28,7 +28,7 @@
     <string name="image_menu_delete_error_permissions_button">Настройки</string>
     <string name="image_menu_share_error">Ошибка :(</string>
     <string name="image_menu_save_error_permissions">Для сохранения файла приложению нужны разрешения</string>
-    <string name="image_menu_save_success">Изображение сохранено в папку Загрузки</string>
+    <string name="image_menu_save_success">Изображение сохранено в папку %1$s</string>
     <string name="image_menu_save_error">Изображение не сохраненно :(</string>
 
     <string name="splash_images_provider">With</string>

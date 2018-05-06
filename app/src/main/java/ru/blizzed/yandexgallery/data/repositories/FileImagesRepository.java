@@ -68,28 +68,27 @@ public class FileImagesRepository {
         FileObserver fileObserver = new FileObserver(folder.getFile().getAbsolutePath(), CREATE | DELETE) {
             @Override
             public void onEvent(int event, @Nullable String path) {
-                Disposable disposable = Observable.fromIterable(folder.getImagesList())
-                        .filter(i -> i.getFile().getCanonicalFile().getName().equals(path))
-                        .firstOrError()
-                        .subscribe(cause -> {
-                            FileImagesFolderEvent.Type type = null;
-                            if (event == CREATE) {
-                                type = FileImagesFolderEvent.Type.FILE_ADDED;
-                                folder.addImage(cause);
-                            } else if (event == DELETE) {
-                                type = FileImagesFolderEvent.Type.FILE_DELETED;
+                if (event == CREATE) {
+                    FileImage newImage = new FileImage(new File(String.format("%s/%s", folder.getFile().getAbsolutePath(), path)));
+                    folder.addImage(newImage);
+                    foldersEventsSubject.onNext(new FileImagesFolderEvent(folder, FileImagesFolderEvent.Type.FILE_ADDED, newImage));
+                } else if (event == DELETE) {
+                    Disposable disposable = Observable.fromIterable(folder.getImagesList())
+                            .filter(i -> i.getFile().getCanonicalFile().getName().equals(path))
+                            .firstOrError()
+                            .subscribe(cause -> {
                                 folder.removeImage(cause);
-                            }
-
-                            if (type != null)
-                                foldersEventsSubject.onNext(new FileImagesFolderEvent(folder, FileImagesFolderEvent.Type.FILE_ADDED, cause));
-                        }, error -> {
-                            Log.e("ru.blizzed.yandex", error.toString());
-                        });
+                                foldersEventsSubject.onNext(new FileImagesFolderEvent(folder, FileImagesFolderEvent.Type.FILE_DELETED, cause));
+                            }, error -> {
+                                Log.d("ru.blizzed.yandex", error.toString());
+                            });
+                }
             }
+
         };
         fileObserver.startWatching();
         folders.put(folder, fileObserver);
+        Log.v("ru.blizzed.yandex", "Folder observer created for " + folder.getFile().getAbsolutePath());
     }
 
     private Flowable<FileImagesFolder> getImageFolders() {

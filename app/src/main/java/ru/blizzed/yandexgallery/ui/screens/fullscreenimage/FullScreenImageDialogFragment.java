@@ -204,6 +204,10 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
     }
 
     protected Snackbar createSnackbar(@StringRes int text) {
+        return createSnackbar(getString(text));
+    }
+
+    protected Snackbar createSnackbar(String text) {
         return Snackbar.make(viewPager, text, Snackbar.LENGTH_SHORT);
     }
 
