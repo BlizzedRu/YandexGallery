@@ -1,8 +1,5 @@
 package ru.blizzed.yandexgallery.ui.screens.favorite;
 
-import android.app.DialogFragment;
-import android.os.Bundle;
-
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
@@ -11,14 +8,11 @@ import javax.inject.Inject;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
-import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
-import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessURLImageListFragment;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
-public class FavoritePage extends EndlessImageListFragment<URLImage> implements EndlessImageListContract.View<URLImage> {
+public class FavoritePage extends EndlessURLImageListFragment implements EndlessImageListContract.View<URLImage> {
 
     public static final String TAG = "favorite";
 
@@ -35,29 +29,9 @@ public class FavoritePage extends EndlessImageListFragment<URLImage> implements 
     }
 
     @ProvidePresenter
-    FavoritePresenter providePresenter() {
-        return presenter;
-    }
-
     @Override
     protected FavoritePresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    protected ImageLoader<URLImage> provideImageLoader() {
-        return ImageLoader.URL_IMAGE_PREVIEW;
-    }
-
-    @Override
-    public void openImage(URLImage image) {
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(FullScreenImageDialogFragment.KEY_IMAGES, getImages());
-        args.putInt(FullScreenImageDialogFragment.KEY_POSITION, getImages().indexOf(image));
-        args.putInt(FullScreenImageDialogFragment.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
-        DialogFragment dialog = new FullScreenURLImageDialogFragment();
-        dialog.setArguments(args);
-        dialog.show(getChildFragmentManager(), "fullscreen");
     }
 
     @Override

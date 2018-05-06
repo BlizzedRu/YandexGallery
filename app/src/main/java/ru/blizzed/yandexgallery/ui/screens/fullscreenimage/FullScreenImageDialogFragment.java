@@ -2,6 +2,8 @@ package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -246,6 +248,15 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
 
         downMenu.setItems(items);
         downMenu.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) parentFragment).onDismiss(dialog);
+        }
     }
 
     @Override

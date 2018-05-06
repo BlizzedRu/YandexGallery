@@ -1,6 +1,5 @@
 package ru.blizzed.yandexgallery.ui.screens.feed.category;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -11,12 +10,9 @@ import javax.inject.Inject;
 import ru.blizzed.pixabaylib.params.CategoryParam;
 import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
-import ru.blizzed.yandexgallery.ui.ImageLoader;
-import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessURLImageListFragment;
 
-public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> implements CategoryImagesContract.View {
+public class CategoryImagesFragment extends EndlessURLImageListFragment implements CategoryImagesContract.View {
 
     private static final String KEY_CATEGORY = "category";
 
@@ -43,13 +39,9 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
                 .inject(this);
     }
 
+    @ProvidePresenter
     @Override
     public CategoryImagesPresenter getPresenter() {
-        return presenter;
-    }
-
-    @ProvidePresenter
-    public CategoryImagesPresenter providePresenter() {
         return presenter;
     }
 
@@ -58,24 +50,4 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
         //getImages().get(getImages().indexOf(image)).setFavorite(isFavorite);
     }
 
-    @Override
-    protected ImageLoader<URLImage> provideImageLoader() {
-        return ImageLoader.URL_IMAGE_PREVIEW;
-    }
-
-    @Override
-    public void openImage(URLImage image) {
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(FullScreenImageDialogFragment.KEY_IMAGES, getImages());
-        args.putInt(FullScreenImageDialogFragment.KEY_POSITION, getImages().indexOf(image));
-        args.putInt(FullScreenImageDialogFragment.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
-        DialogFragment dialog = new FullScreenURLImageDialogFragment();
-        dialog.setArguments(args);
-        dialog.show(getChildFragmentManager(), "fullscreen");
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }

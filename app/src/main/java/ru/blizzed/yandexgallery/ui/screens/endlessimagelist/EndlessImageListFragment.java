@@ -1,5 +1,7 @@
 package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +27,7 @@ import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 import static android.app.Activity.RESULT_OK;
 
-public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFragment implements EndlessImageListContract.View<T> {
+public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFragment implements EndlessImageListContract.View<T>, DialogInterface.OnDismissListener {
 
     public static final int FULL_SCREEN_REQUEST_CODE = 2324423;
 
@@ -38,6 +40,8 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     private EndlessImageListViewAdapter<T> imagesAdapter;
     private ArrayList<T> images;
     private Unbinder unbinder;
+
+    private DialogFragment fullScreenImageDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,6 +134,30 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     @Override
     public void hideLoading() {
 
+    }
+
+    protected abstract DialogFragment provideFullScreenDialogFragment();
+
+    @Override
+    public void openImage(T image) {
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(FullScreenImageDialogFragment.KEY_IMAGES, getImages());
+        args.putInt(FullScreenImageDialogFragment.KEY_POSITION, getImages().indexOf(image));
+        args.putInt(FullScreenImageDialogFragment.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
+        fullScreenImageDialog = provideFullScreenDialogFragment();
+        fullScreenImageDialog.setArguments(args);
+        fullScreenImageDialog.show(getChildFragmentManager(), "fullscreen");
+    }
+
+    @Override
+    public void closeImage() {
+        if (fullScreenImageDialog != null)
+            fullScreenImageDialog.dismiss();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        getPresenter().onImageClosed();
     }
 
     /* Catching closed fullscreen image activity for scrolling to the last position */

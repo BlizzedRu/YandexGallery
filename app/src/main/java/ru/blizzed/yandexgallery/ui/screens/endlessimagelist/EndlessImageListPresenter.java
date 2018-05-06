@@ -47,6 +47,11 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     }
 
     @Override
+    public void onImageClosed() {
+        getViewState().closeImage();
+    }
+
+    @Override
     public void onImageClicked(T image) {
         getViewState().openImage(image);
     }

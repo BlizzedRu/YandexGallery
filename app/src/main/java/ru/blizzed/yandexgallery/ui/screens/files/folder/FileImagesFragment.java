@@ -15,7 +15,6 @@ import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageDialogFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
 
 public class FileImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage>, OnFileImageRemovedListener {
 
@@ -44,13 +43,9 @@ public class FileImagesFragment extends EndlessImageListFragment<FileImage> impl
                 .inject(this);
     }
 
+    @ProvidePresenter
     @Override
     public FolderImagesPresenter getPresenter() {
-        return presenter;
-    }
-
-    @ProvidePresenter
-    public FolderImagesPresenter providePresenter() {
         return presenter;
     }
 
@@ -66,15 +61,8 @@ public class FileImagesFragment extends EndlessImageListFragment<FileImage> impl
     }
 
     @Override
-    public void openImage(FileImage image) {
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(FullScreenImageDialogFragment.KEY_IMAGES, getImages());
-        args.putInt(FullScreenImageDialogFragment.KEY_POSITION, getImages().indexOf(image));
-        args.putInt(FullScreenImageDialogFragment.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
-
-        DialogFragment dialog = new FullScreenFileImageDialogFragment();
-        dialog.setArguments(args);
-        dialog.show(getChildFragmentManager(), "fullscreen");
+    protected DialogFragment provideFullScreenDialogFragment() {
+        return new FullScreenFileImageDialogFragment();
     }
 
 }
