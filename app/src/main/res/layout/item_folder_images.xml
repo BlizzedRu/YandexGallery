@@ -58,7 +58,7 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <ru.blizzed.yandexgallery.ui.customs.UntouchableRecyclerView
                 android:id="@+id/imagesRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
