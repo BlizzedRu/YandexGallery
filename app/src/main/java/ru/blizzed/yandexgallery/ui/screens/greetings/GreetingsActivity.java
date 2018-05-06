@@ -47,6 +47,8 @@ public class GreetingsActivity extends AppIntro2 {
         addSlide(AppIntroFragment.newInstance(thanksPage));
 
         askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+
+        showSkipButton(false);
     }
 
     @Override

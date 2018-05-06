@@ -9,7 +9,7 @@ import ru.blizzed.yandexgallery.data.model.Image;
 
 public class FileImage implements Image {
 
-    final static Creator<FileImage> CREATOR = new Creator<FileImage>() {
+    public final static Creator<FileImage> CREATOR = new Creator<FileImage>() {
         @Override
         public FileImage createFromParcel(Parcel source) {
             return new FileImage((File) source.readSerializable());

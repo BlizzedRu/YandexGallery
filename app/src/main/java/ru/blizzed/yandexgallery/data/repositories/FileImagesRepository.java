@@ -20,7 +20,9 @@ import io.reactivex.Emitter;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
@@ -62,7 +64,7 @@ public class FileImagesRepository {
 
     public void subscribe(Observer<FileImagesFolderEvent> observer) {
         if (foldersEventsSubject == null) foldersEventsSubject = PublishSubject.create();
-        foldersEventsSubject.subscribe(observer);
+        foldersEventsSubject.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
     private void addFolderObserver(FileImagesFolder folder) {
