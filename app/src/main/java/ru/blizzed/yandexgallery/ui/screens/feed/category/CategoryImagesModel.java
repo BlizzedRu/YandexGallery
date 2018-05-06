@@ -1,6 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.feed.category;
 
-import android.util.Log;
+import com.orhanobut.logger.Logger;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +51,7 @@ public class CategoryImagesModel implements CategoryImagesContract.Model {
                                     if (imgs.contains(image))
                                         image.setFavorite(imgs.get(imgs.indexOf(image)).isFavorite());
                                 }
-                            }, error -> Log.e("ru.blizzed.yandex", error.toString()));
+                            }, error -> Logger.e(error, "With getting favorites from DB"));
                 });
     }
 

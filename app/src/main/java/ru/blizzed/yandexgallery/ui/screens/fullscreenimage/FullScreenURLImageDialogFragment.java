@@ -3,9 +3,10 @@ package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 
@@ -103,7 +104,7 @@ public class FullScreenURLImageDialogFragment extends FullScreenImageDialogFragm
 
     private void onFavoriteError(Throwable e, boolean behavior) {
         onFavoriteChange(!behavior);
-        Log.e("ru.blizzed.yandex", e.toString());
+        Logger.e(e, "Favorite error");
     }
 
     private void onShare() {
@@ -124,7 +125,7 @@ public class FullScreenURLImageDialogFragment extends FullScreenImageDialogFragm
 
     private void onShareError(Throwable e) {
         createSnackbar(R.string.image_menu_share_error).show();
-        Log.e("ru.blizzed.yandex", e.toString());
+        Logger.e(e, "Sharing error");
     }
 
     private void saveFile() {
@@ -146,7 +147,7 @@ public class FullScreenURLImageDialogFragment extends FullScreenImageDialogFragm
 
     private void onSaveError(Throwable e) {
         createSnackbar(R.string.image_menu_save_error).show();
-        Log.e("ru.blizzed.yandex", e.toString());
+        Logger.e(e, "Saving error");
     }
 
     private File getDownloadsDir() {

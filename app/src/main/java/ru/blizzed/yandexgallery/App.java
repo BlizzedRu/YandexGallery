@@ -3,6 +3,9 @@ package ru.blizzed.yandexgallery;
 import android.app.Activity;
 import android.app.Application;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
+
 import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
@@ -35,6 +38,7 @@ public class App extends Application implements HasActivityInjector {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        Logger.addLogAdapter(new AndroidLogAdapter());
 
         repositoriesComponent = DaggerRepositoriesComponent.builder()
                 .contextModule(new ContextModule(this))

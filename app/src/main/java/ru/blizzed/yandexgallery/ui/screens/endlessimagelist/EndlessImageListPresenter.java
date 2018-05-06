@@ -1,6 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
-import android.util.Log;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -88,7 +88,7 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
     }
 
     private void onErrorOccurred(Throwable error) {
-        Log.e("ru.blizzed", error.toString());
+        Logger.e(error, error.getMessage());
     }
 
 }

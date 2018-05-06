@@ -54,4 +54,5 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.github.apl-devs:appintro:v4.2.3'
     implementation 'com.github.msayan:tutorial-view:v1.0.6'
+    implementation 'com.orhanobut:logger:2.2.0'
 }

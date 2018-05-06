@@ -3,8 +3,9 @@ package ru.blizzed.yandexgallery.data.repositories;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class FileImagesRepository {
                                 folder.removeImage(cause);
                                 foldersEventsSubject.onNext(new FileImagesFolderEvent(folder, FileImagesFolderEvent.Type.FILE_DELETED, cause));
                             }, error -> {
-                                Log.d("ru.blizzed.yandex", error.toString());
+                                Logger.d(error.toString());
                             });
                 }
             }
@@ -88,7 +89,7 @@ public class FileImagesRepository {
         };
         fileObserver.startWatching();
         folders.put(folder, fileObserver);
-        Log.v("ru.blizzed.yandex", "Folder observer created for " + folder.getFile().getAbsolutePath());
+        Logger.v("Folder observer created for " + folder.getFile().getAbsolutePath());
     }
 
     private Flowable<FileImagesFolder> getImageFolders() {
