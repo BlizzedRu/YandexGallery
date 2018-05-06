@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="greetings_hello_title">Привет</string>
+    <string name="greetings_hello_message">Спасибо, что даете отличную возможность получить новые знания и подкрепить их реальной практикой</string>
+
+    <string name="greetings_time_title">Не тем час дорог, что долог, а тем, что короток</string>
+    <string name="greetings_time_message">К сожалению, полностью погрузиться в дело не получилось – время не позволило. Но был рад стараться делать то, что успел!</string>
+
+    <string name="greetings_permissions_title">Нужно кое-что уладить</string>
+    <string name="greetings_permissions_message">Для отображения картинок с вашего устройства, приложению потребуются соответствующие разрешения. Вы же не против?</string>
+
+    <string name="greetings_thanks_title">Спасибо!</string>
+    <string name="greetings_thanks_message">Картинки можно добавлять в избранное, скачивать, делиться, а также их удобно закрывать свайпом вверх или вниз :)</string>
+
+</resources>

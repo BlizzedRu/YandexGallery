@@ -29,15 +29,18 @@
             android:name=".ui.screens.fullscreenimage.activity.FullScreenURLImageActivity"
             android:theme="@style/AppTheme.FullScreen">
         </activity>
-
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.screens.splash.SplashActivity"
             android:theme="@style/AppTheme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.screens.greetings.GreetingsActivity"
+            android:theme="@style/AppTheme.FullScreen">
         </activity>
 
         <provider
@@ -50,6 +53,8 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
+        <activity android:name=".ui.screens.greetings.HelloActivity">
+        </activity>
     </application>
 
 </manifest>

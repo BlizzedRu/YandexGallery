@@ -19,7 +19,6 @@ import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
-import it.sephiroth.android.library.imagezoom.utils.IDisposable;
 import ru.blizzed.yandexgallery.BuildConfig;
 
 /**
@@ -27,7 +26,7 @@ import ru.blizzed.yandexgallery.BuildConfig;
  *
  * @author alessandro
  */
-public abstract class ImageViewTouchBase extends AppCompatImageView implements IDisposable {
+public abstract class ImageViewTouchBase extends AppCompatImageView {
     public static final String VERSION = BuildConfig.VERSION_NAME;
     public static final float MIN_SCALE_DIFF = 0.1f;
     public static final String TAG = "ImageViewTouchBase";
@@ -983,11 +982,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
                 }
         );
         animation.start();
-    }
-
-    @Override
-    public void dispose() {
-        clear();
     }
 
     @Override
