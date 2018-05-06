@@ -49,9 +49,7 @@ public class SplashActivity extends Activity {
                 .scan()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .doOnComplete(this::startApp)
-                .doOnError(error -> startApp())
-                .subscribe();
+                .subscribe(this::startApp, error -> startApp());
     }
 
     @Override

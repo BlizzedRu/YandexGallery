@@ -53,8 +53,6 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <activity android:name=".ui.screens.greetings.HelloActivity">
-        </activity>
     </application>
 
 </manifest>

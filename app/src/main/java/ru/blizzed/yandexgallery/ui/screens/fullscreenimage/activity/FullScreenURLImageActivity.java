@@ -75,8 +75,8 @@ public class FullScreenURLImageActivity extends FullScreenImageActivity<URLImage
                 .favoriteImagesRepository()
                 .add(getCurrentImage())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(e -> onFavoriteError(e, true))
-                .subscribe();
+                .subscribe(() -> {
+                }, e -> onFavoriteError(e, true));
     }
 
     private void removeFromFavorite() {
@@ -85,8 +85,8 @@ public class FullScreenURLImageActivity extends FullScreenImageActivity<URLImage
                 .favoriteImagesRepository()
                 .remove(getCurrentImage())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(e -> onFavoriteError(e, false))
-                .subscribe();
+                .subscribe(() -> {
+                }, e -> onFavoriteError(e, false));
     }
 
     private void onFavoriteChange(boolean behavior) {

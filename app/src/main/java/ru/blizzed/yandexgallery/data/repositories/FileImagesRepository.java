@@ -45,11 +45,7 @@ public class FileImagesRepository {
     public Completable scan() {
         folders = new HashMap<>();
         return Completable.create(emitter ->
-                getImageFolders()
-                        .doOnNext(this::addFolderObserver)
-                        .doOnComplete(emitter::onComplete)
-                        .doOnError(emitter::onError)
-                        .subscribe()
+                getImageFolders().subscribe(this::addFolderObserver, emitter::onError, emitter::onComplete)
         );
     }
 

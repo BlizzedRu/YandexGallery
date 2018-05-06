@@ -46,14 +46,12 @@ public class CategoryImagesModel implements CategoryImagesContract.Model {
                      * It's better way (IMO) to unite it here as a list and not each item every time when full screen image opens
                      */
                     favoritesRepository.getIfContains(next)
-                            .doOnNext(imgs -> {
+                            .subscribe(imgs -> {
                                 for (URLImage image : next) {
                                     if (imgs.contains(image))
                                         image.setFavorite(imgs.get(imgs.indexOf(image)).isFavorite());
                                 }
-                            })
-                            .doOnError(error -> Log.e("ru.blizzed.yandex", error.toString()))
-                            .subscribe();
+                            }, error -> Log.e("ru.blizzed.yandex", error.toString()));
                 });
     }
 
