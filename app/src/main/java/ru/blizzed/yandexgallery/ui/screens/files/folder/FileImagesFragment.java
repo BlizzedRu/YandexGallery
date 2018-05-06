@@ -1,13 +1,10 @@
 package ru.blizzed.yandexgallery.ui.screens.files.folder;
 
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -17,11 +14,8 @@ import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.activity.FullScreenFileImageActivity;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.activity.FullScreenImageActivity;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenFileImageDialogFragment;
-
-import static android.app.Activity.RESULT_OK;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
 
 public class FileImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage>, OnFileImageRemovedListener {
 
@@ -74,25 +68,13 @@ public class FileImagesFragment extends EndlessImageListFragment<FileImage> impl
     @Override
     public void openImage(FileImage image) {
         Bundle args = new Bundle();
-        args.putParcelableArrayList(FullScreenImageActivity.KEY_IMAGES, getImages());
-        args.putInt(FullScreenImageActivity.KEY_POSITION, getImages().indexOf(image));
-        args.putInt(FullScreenImageActivity.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
+        args.putParcelableArrayList(FullScreenImageDialogFragment.KEY_IMAGES, getImages());
+        args.putInt(FullScreenImageDialogFragment.KEY_POSITION, getImages().indexOf(image));
+        args.putInt(FullScreenImageDialogFragment.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
 
         DialogFragment dialog = new FullScreenFileImageDialogFragment();
         dialog.setArguments(args);
         dialog.show(getChildFragmentManager(), "fullscreen");
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == FULL_SCREEN_REQUEST_CODE) {
-                ArrayList<FileImage> removedImages = data.getParcelableArrayListExtra(FullScreenFileImageActivity.KEY_REMOVED);
-                if (removedImages != null && !removedImages.isEmpty()) {
-                    getPresenter().onImagesRemoved(removedImages);
-                }
-            }
-        }
-    }
 }

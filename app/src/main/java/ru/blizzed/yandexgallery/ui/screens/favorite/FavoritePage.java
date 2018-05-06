@@ -14,8 +14,8 @@ import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenImageDialogFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenURLImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageDialogFragment;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 public class FavoritePage extends EndlessImageListFragment<URLImage> implements EndlessImageListContract.View<URLImage> {

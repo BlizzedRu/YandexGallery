@@ -20,7 +20,7 @@ import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.GridSpacingItemDecoration;
 import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.activity.FullScreenImageActivity;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 import static android.app.Activity.RESULT_OK;
@@ -138,7 +138,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == FULL_SCREEN_REQUEST_CODE) {
-                int position = data.getIntExtra(FullScreenImageActivity.KEY_POSITION, 0);
+                int position = data.getIntExtra(FullScreenImageDialogFragment.KEY_POSITION, 0);
                 scrollTo(position);
             }
         }

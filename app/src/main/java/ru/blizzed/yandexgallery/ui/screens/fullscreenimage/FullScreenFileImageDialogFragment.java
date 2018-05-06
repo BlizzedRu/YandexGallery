@@ -1,17 +1,14 @@
-package ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment;
+package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 
 import java.io.IOException;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
@@ -19,10 +16,6 @@ import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.files.folder.OnFileImageRemovedListener;
 
 public class FullScreenFileImageDialogFragment extends FullScreenImageDialogFragment<FileImage> {
-
-    private static final String PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-    private Disposable fileRemovingDisposable;
 
     private OnFileImageRemovedListener onFileRemovedListener;
 
@@ -56,7 +49,8 @@ public class FullScreenFileImageDialogFragment extends FullScreenImageDialogFrag
                 if (hasPermission(PERMISSION)) removeFile();
                 else {
                     if (canRequestPermissions(PERMISSION)) requestPermission(PERMISSION);
-                    else showPermissionSettingsSnackbar();
+                    else
+                        createPermissionSettingsSnackbar(R.string.image_menu_delete_error_permissions).show();
                 }
                 break;
         }
@@ -72,15 +66,8 @@ public class FullScreenFileImageDialogFragment extends FullScreenImageDialogFrag
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (fileRemovingDisposable != null)
-            fileRemovingDisposable.dispose();
-    }
-
     private void removeFile() {
-        fileRemovingDisposable = Completable
+        addDisposable(Completable
                 .create(emitter -> {
                     boolean deleted = getCurrentImage().getFile().delete();
                     if (deleted) emitter.onComplete();
@@ -101,17 +88,11 @@ public class FullScreenFileImageDialogFragment extends FullScreenImageDialogFrag
                     }
 
                     updateToolbarTitle();
-                    getSnackbar(R.string.image_menu_delete_success).show();
+                    createSnackbar(R.string.image_menu_delete_success).show();
                 }, error -> {
-                    getSnackbar(R.string.image_menu_delete_error).show();
-                });
-    }
-
-    private void showPermissionSettingsSnackbar() {
-        getSnackbar(R.string.image_menu_delete_error_permissions)
-                .setDuration(Snackbar.LENGTH_LONG)
-                .setAction(R.string.image_menu_delete_error_permissions_button, v -> openPermissionsSettings())
-                .show();
+                    createSnackbar(R.string.image_menu_delete_error).show();
+                })
+        );
     }
 
 }

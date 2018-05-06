@@ -1,5 +1,6 @@
-package ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment;
+package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
 
+import android.Manifest;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,18 +23,20 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.ButtonsMenuView;
 import ru.blizzed.yandexgallery.ui.customs.ImageViewPager;
 import ru.blizzed.yandexgallery.ui.customs.flickableimageview.FlickableImageView;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImagePagerAdapter;
 import ru.blizzed.yandexgallery.utils.PermissionsUtils;
 
 public abstract class FullScreenImageDialogFragment<T extends Image> extends DialogFragment implements ButtonsMenuView.OnItemClickListener, ViewPager.OnPageChangeListener {
@@ -43,19 +46,27 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
     public static final String KEY_REQUEST_CODE = "request_code";
 
     private static final int PERMISSIONS_SETTINGS_REQUEST_CODE = 808;
+    protected static final String PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
     protected List<T> images;
     protected FullScreenImagePagerAdapter<T> adapter;
     protected int position;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
     @BindView(R.id.downMenu)
     ButtonsMenuView downMenu;
+
     @BindView(R.id.pager)
     ImageViewPager viewPager;
+
     private View view;
 
     private Unbinder unbinder;
     private boolean isToolbarVisible = true;
+
+    private List<Disposable> disposables;
 
     private FullScreenImagePagerAdapter.OnImageListener<T> listener = new FullScreenImagePagerAdapter.OnImageListener<T>() {
         @Override
@@ -192,8 +203,32 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
         return getResources().getInteger(R.integer.write_external_storage_permission_request_code);
     }
 
-    protected Snackbar getSnackbar(@StringRes int text) {
+    protected Snackbar createSnackbar(@StringRes int text) {
         return Snackbar.make(viewPager, text, Snackbar.LENGTH_SHORT);
+    }
+
+    protected Snackbar createPermissionSettingsSnackbar(@StringRes int message) {
+        return createSnackbar(message)
+                .setDuration(Snackbar.LENGTH_LONG)
+                .setAction(R.string.image_menu_delete_error_permissions_button, v -> openPermissionsSettings());
+    }
+
+    protected void addDisposable(Disposable disposable) {
+        if (disposables == null)
+            disposables = new ArrayList<>();
+        disposables.add(disposable);
+    }
+
+    protected void removeDisposable(Disposable disposable) {
+        if (disposables != null)
+            disposables.remove(disposable);
+    }
+
+    protected void dispose() {
+        if (disposables != null) {
+            Observable.fromIterable(disposables).forEach(Disposable::dispose);
+            disposables.clear();
+        }
     }
 
     private void fillDownMenu(ButtonsMenuView downMenu) {
@@ -213,5 +248,6 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        dispose();
     }
 }

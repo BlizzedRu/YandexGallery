@@ -13,8 +13,8 @@ import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenImageDialogFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenURLImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageDialogFragment;
 
 public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> implements CategoryImagesContract.View {
 
