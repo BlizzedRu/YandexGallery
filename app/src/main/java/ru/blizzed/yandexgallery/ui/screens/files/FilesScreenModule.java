@@ -9,8 +9,8 @@ import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 import ru.blizzed.yandexgallery.data.repositories.FileImagesRepository;
 import ru.blizzed.yandexgallery.di.ScreensScope;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
-import ru.blizzed.yandexgallery.ui.screens.files.folder.FolderImagePresenter;
 import ru.blizzed.yandexgallery.ui.screens.files.folder.FolderImagesModel;
+import ru.blizzed.yandexgallery.ui.screens.files.folder.FolderImagesPresenter;
 
 @Module
 public class FilesScreenModule {
@@ -39,8 +39,8 @@ public class FilesScreenModule {
 
     @ScreensScope
     @Provides
-    FolderImagePresenter provideFolderPresenter(EndlessImageListContract.Model<FileImage> model) {
-        return new FolderImagePresenter(model);
+    FolderImagesPresenter provideFolderPresenter(EndlessImageListContract.Model<FileImage> model) {
+        return new FolderImagesPresenter(model);
     }
 
 }

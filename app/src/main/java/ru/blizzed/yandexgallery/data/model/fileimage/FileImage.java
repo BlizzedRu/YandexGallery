@@ -55,6 +55,6 @@ public class FileImage implements Image {
 
     @Override
     public int hashCode() {
-        return Objects.hash(file);
+        return Objects.hash(file.getAbsolutePath());
     }
 }

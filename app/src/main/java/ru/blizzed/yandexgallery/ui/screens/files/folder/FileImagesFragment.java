@@ -1,5 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.files.folder;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -16,24 +17,25 @@ import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListContract;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenFileImageActivity;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.activity.FullScreenFileImageActivity;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.activity.FullScreenImageActivity;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenFileImageDialogFragment;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FolderImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage> {
+public class FileImagesFragment extends EndlessImageListFragment<FileImage> implements EndlessImageListContract.View<FileImage>, OnFileImageRemovedListener {
 
     private static final String KEY_FOLDER = "folder";
 
     @Inject
     @InjectPresenter
-    FolderImagePresenter presenter;
+    FolderImagesPresenter presenter;
 
-    public static FolderImagesFragment newInstance(FileImagesFolder folder) {
+    public static FileImagesFragment newInstance(FileImagesFolder folder) {
         Bundle args = new Bundle();
         args.putParcelable(KEY_FOLDER, folder);
 
-        FolderImagesFragment fragment = new FolderImagesFragment();
+        FileImagesFragment fragment = new FileImagesFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,12 +51,12 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
     }
 
     @Override
-    public FolderImagePresenter getPresenter() {
+    public FolderImagesPresenter getPresenter() {
         return presenter;
     }
 
     @ProvidePresenter
-    public FolderImagePresenter providePresenter() {
+    public FolderImagesPresenter providePresenter() {
         return presenter;
     }
 
@@ -64,12 +66,21 @@ public class FolderImagesFragment extends EndlessImageListFragment<FileImage> im
     }
 
     @Override
+    public void onImageRemoved(FileImage image) {
+        //presenter.onImagesRemoved(Collections.singletonList(image));
+        getImagesAdapter().notifyDataSetChanged();
+    }
+
+    @Override
     public void openImage(FileImage image) {
-        Intent intent = new Intent(getActivity(), FullScreenFileImageActivity.class);
-        intent.putExtra(FullScreenImageActivity.KEY_IMAGES, getImages());
-        intent.putExtra(FullScreenImageActivity.KEY_POSITION, getImages().indexOf(image));
-        intent.putExtra(FullScreenImageActivity.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
-        startActivityForResult(intent, FULL_SCREEN_REQUEST_CODE);
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(FullScreenImageActivity.KEY_IMAGES, getImages());
+        args.putInt(FullScreenImageActivity.KEY_POSITION, getImages().indexOf(image));
+        args.putInt(FullScreenImageActivity.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
+
+        DialogFragment dialog = new FullScreenFileImageDialogFragment();
+        dialog.setArguments(args);
+        dialog.show(getChildFragmentManager(), "fullscreen");
     }
 
     @Override

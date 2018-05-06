@@ -1,6 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.feed.category;
 
-import android.content.Intent;
+import android.app.DialogFragment;
 import android.os.Bundle;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -13,8 +13,8 @@ import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.di.components.RepositoriesComponent;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListFragment;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageActivity;
-import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenURLImageActivity;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenImageDialogFragment;
+import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment.FullScreenURLImageDialogFragment;
 
 public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> implements CategoryImagesContract.View {
 
@@ -65,11 +65,13 @@ public class CategoryImagesFragment extends EndlessImageListFragment<URLImage> i
 
     @Override
     public void openImage(URLImage image) {
-        Intent intent = new Intent(getActivity(), FullScreenURLImageActivity.class);
-        intent.putExtra(FullScreenImageActivity.KEY_IMAGES, getImages());
-        intent.putExtra(FullScreenImageActivity.KEY_POSITION, getImages().indexOf(image));
-        intent.putExtra(FullScreenImageActivity.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
-        startActivityForResult(intent, FULL_SCREEN_REQUEST_CODE);
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(FullScreenImageDialogFragment.KEY_IMAGES, getImages());
+        args.putInt(FullScreenImageDialogFragment.KEY_POSITION, getImages().indexOf(image));
+        args.putInt(FullScreenImageDialogFragment.KEY_REQUEST_CODE, FULL_SCREEN_REQUEST_CODE);
+        DialogFragment dialog = new FullScreenURLImageDialogFragment();
+        dialog.setArguments(args);
+        dialog.show(getChildFragmentManager(), "fullscreen");
     }
 
     @Override

@@ -128,7 +128,6 @@ public class FilesPage extends DiMvpFragment implements FilesContract.View {
     @Override
     public void hideContent() {
         foldersRecycler.setVisibility(View.GONE);
-
     }
 
     @Override

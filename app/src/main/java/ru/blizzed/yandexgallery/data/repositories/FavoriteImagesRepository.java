@@ -8,6 +8,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
@@ -44,10 +45,7 @@ public class FavoriteImagesRepository {
 
     public void subscribe(Observer<FavoriteImageEvent> observer) {
         if (subject == null) subject = PublishSubject.create();
-        subject.publish().refCount().subscribe(observer);
-        //ConnectableObservable<FavoriteImageEvent> obs = subject.publish();
-        //obs.subscribe(observer);
-        //obs.connect();
+        subject.observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
     public Completable remove(URLImage image) {

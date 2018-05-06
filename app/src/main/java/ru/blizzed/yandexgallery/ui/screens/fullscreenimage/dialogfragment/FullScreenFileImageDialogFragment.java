@@ -1,14 +1,13 @@
-package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
+package ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment;
 
 import android.Manifest;
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -17,16 +16,25 @@ import io.reactivex.schedulers.Schedulers;
 import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
+import ru.blizzed.yandexgallery.ui.screens.files.folder.OnFileImageRemovedListener;
 
-public class FullScreenFileImageActivity extends FullScreenImageActivity<FileImage> {
-
-    public static final String KEY_REMOVED = "removed_images";
+public class FullScreenFileImageDialogFragment extends FullScreenImageDialogFragment<FileImage> {
 
     private static final String PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private Disposable fileRemovingDisposable;
 
-    private ArrayList<FileImage> removedImages;
+    private OnFileImageRemovedListener onFileRemovedListener;
+
+    @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+        try {
+            onFileRemovedListener = (OnFileImageRemovedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnFileImageRemovedListener");
+        }
+    }
 
     @Override
     protected ImageLoader<FileImage> provideImageLoader() {
@@ -65,13 +73,6 @@ public class FullScreenFileImageActivity extends FullScreenImageActivity<FileIma
     }
 
     @Override
-    public void finish() {
-        // Pull removed images to folder (prev screen) to display changes
-        addToResultIntent(new Intent().putParcelableArrayListExtra(KEY_REMOVED, removedImages));
-        super.finish();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (fileRemovingDisposable != null)
@@ -90,19 +91,16 @@ public class FullScreenFileImageActivity extends FullScreenImageActivity<FileIma
                 .subscribe(() -> {
                     int removingPosition = position;
 
-                    if (removedImages == null) removedImages = new ArrayList<>();
-                    removedImages.add(images.get(position));
-
+                    onFileRemovedListener.onImageRemoved(images.get(removingPosition));
                     images.remove(removingPosition);
+                    adapter.notifyDataSetChanged();
 
                     if (images.size() == 0) {
-                        finish();
+                        dismiss();
                         return;
                     }
 
-                    adapter.notifyDataSetChanged();
-                    viewPager.setCurrentItem(removingPosition < images.size() - 1 ? position + 1 : position, true);
-
+                    updateToolbarTitle();
                     getSnackbar(R.string.image_menu_delete_success).show();
                 }, error -> {
                     getSnackbar(R.string.image_menu_delete_error).show();

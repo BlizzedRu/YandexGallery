@@ -7,9 +7,9 @@ import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListCont
 import ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListPresenter;
 
 @InjectViewState
-public class FolderImagePresenter extends EndlessImageListPresenter<FileImage> {
+public class FolderImagesPresenter extends EndlessImageListPresenter<FileImage> {
 
-    public FolderImagePresenter(EndlessImageListContract.Model<FileImage> model) {
+    public FolderImagesPresenter(EndlessImageListContract.Model<FileImage> model) {
         super(model);
     }
 

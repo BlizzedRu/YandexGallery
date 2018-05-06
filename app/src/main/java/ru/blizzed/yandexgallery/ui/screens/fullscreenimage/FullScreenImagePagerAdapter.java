@@ -2,12 +2,8 @@ package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.alexvasilkov.gestures.GestureController;
-import com.alexvasilkov.gestures.views.GestureImageView;
 
 import java.util.List;
 
@@ -15,16 +11,16 @@ import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.data.model.Image;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 import ru.blizzed.yandexgallery.ui.customs.RecycledPagerAdapter;
+import ru.blizzed.yandexgallery.ui.customs.flickableimageview.FlickableImageView;
 
 public class FullScreenImagePagerAdapter<T extends Image> extends RecycledPagerAdapter<FullScreenImagePagerAdapter.ViewHolder> {
 
-    private OnImageClickListener<T> listener;
-
+    private OnImageListener<T> listener;
     private List<T> images;
     private LayoutInflater inflater;
     private ImageLoader<T> imageLoader;
 
-    public FullScreenImagePagerAdapter(List<T> images, ImageLoader<T> imageLoader, @NonNull OnImageClickListener<T> listener) {
+    public FullScreenImagePagerAdapter(List<T> images, ImageLoader<T> imageLoader, @NonNull OnImageListener<T> listener) {
         this.images = images;
         this.imageLoader = imageLoader;
         this.listener = listener;
@@ -34,35 +30,43 @@ public class FullScreenImagePagerAdapter<T extends Image> extends RecycledPagerA
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         imageLoader.loadImage(viewHolder.img, images.get(position), false);
 
-        viewHolder.img.getController().setOnGesturesListener(new GestureController.OnGestureListener() {
+        viewHolder.img.setOnSingleTapListener(() -> listener.onImageClicked(position, images.get(position)));
+
+        setUpListeners(viewHolder.img, position);
+    }
+
+    private void setUpListeners(FlickableImageView imageView, int position) {
+        if (listener == null) return;
+
+        imageView.setOnSingleTapListener(() -> listener.onImageClicked(position, images.get(position)));
+
+        imageView.setOnDoubleTapListener(() -> listener.onImageDoubleClicked(imageView));
+
+        imageView.setOnZoomListener(new FlickableImageView.OnFlickableImageViewZoomListener() {
             @Override
-            public void onDown(@NonNull MotionEvent event) {
+            public void onStartZoom() {
+                listener.onStartZoom();
             }
 
             @Override
-            public void onUpOrCancel(@NonNull MotionEvent event) {
-            }
-
-            @Override
-            public boolean onSingleTapUp(@NonNull MotionEvent event) {
-                return false;
-            }
-
-            @Override
-            public boolean onSingleTapConfirmed(@NonNull MotionEvent event) {
-                listener.onImageClicked(position, images.get(position));
-                return true;
-            }
-
-            @Override
-            public void onLongPress(@NonNull MotionEvent event) {
-            }
-
-            @Override
-            public boolean onDoubleTap(@NonNull MotionEvent event) {
-                return false;
+            public void onBackFromMinScale() {
+                listener.onZoomBackToMinScale();
             }
         });
+
+        imageView.setOnFlickListener(new FlickableImageView.OnFlickableImageViewFlickListener() {
+            @Override
+            public void onStartFlick() {
+                listener.onStartFlick();
+            }
+
+            @Override
+            public void onFinishFlick() {
+                listener.onFinishFlick();
+            }
+        });
+
+        imageView.setRoot(listener.getRoot());
     }
 
     @Override
@@ -86,13 +90,25 @@ public class FullScreenImagePagerAdapter<T extends Image> extends RecycledPagerA
         return new ViewHolder(v);
     }
 
-    public interface OnImageClickListener<T extends Image> {
+    public interface OnImageListener<T extends Image> {
         void onImageClicked(int position, T image);
+
+        void onImageDoubleClicked(FlickableImageView imageView);
+
+        void onStartZoom();
+
+        void onZoomBackToMinScale();
+
+        void onStartFlick();
+
+        void onFinishFlick();
+
+        View getRoot();
     }
 
     static class ViewHolder extends RecycledPagerAdapter.ViewHolder {
 
-        private GestureImageView img;
+        private FlickableImageView img;
 
         public ViewHolder(View itemView) {
             super(itemView);

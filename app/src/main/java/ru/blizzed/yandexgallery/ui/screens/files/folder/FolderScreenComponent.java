@@ -11,7 +11,7 @@ import ru.blizzed.yandexgallery.ui.screens.files.FilesScreenModule;
 @Component(modules = FilesScreenModule.class, dependencies = RepositoriesComponent.class)
 public interface FolderScreenComponent {
 
-    void inject(FolderImagesFragment fragment);
+    void inject(FileImagesFragment fragment);
 
     @Component.Builder
     interface Builder {

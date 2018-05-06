@@ -1,9 +1,10 @@
-package ru.blizzed.yandexgallery.ui.screens.fullscreenimage;
+package ru.blizzed.yandexgallery.ui.screens.fullscreenimage.dialogfragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -12,13 +13,13 @@ import ru.blizzed.yandexgallery.R;
 import ru.blizzed.yandexgallery.data.model.URLImage;
 import ru.blizzed.yandexgallery.ui.ImageLoader;
 
-public class FullScreenURLImageActivity extends FullScreenImageActivity<URLImage> {
+public class FullScreenURLImageDialogFragment extends FullScreenImageDialogFragment<URLImage> {
 
     private Disposable currentDisposable;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         updateFavoriteState(false);
     }
 
@@ -45,9 +46,11 @@ public class FullScreenURLImageActivity extends FullScreenImageActivity<URLImage
                 }*/
                 break;
             case R.id.favorite:
-                boolean behavior = !getCurrentImage().isFavorite();
-                if (behavior) addToFavorite();
-                else removeFromFavorite();
+                if (isPrevOperationCompleted()) {
+                    boolean behavior = !getCurrentImage().isFavorite();
+                    if (behavior) addToFavorite();
+                    else removeFromFavorite();
+                }
                 break;
             case R.id.save:
                 /*if (hasPermission(PERMISSION)) removeFile();
@@ -105,9 +108,14 @@ public class FullScreenURLImageActivity extends FullScreenImageActivity<URLImage
             currentDisposable.dispose();
     }
 
+    private boolean isPrevOperationCompleted() {
+        return currentDisposable == null || currentDisposable.isDisposed();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         dispose();
     }
+
 }

@@ -7,11 +7,14 @@ import android.view.MenuItem;
 import android.widget.Toolbar;
 
 import ru.blizzed.yandexgallery.R;
+import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 
-public class FolderImagesActivity extends Activity {
+public class FolderImagesActivity extends Activity implements OnFileImageRemovedListener {
 
     public static final String KEY_FOLDER = "folder";
+
+    private FileImagesFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +34,15 @@ public class FolderImagesActivity extends Activity {
             actionBar.setTitle(folder.getTitle());
         }
 
-        FolderImagesFragment fragment = FolderImagesFragment.newInstance(folder);
+        fragment = FileImagesFragment.newInstance(folder);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
+    }
+
+    @Override
+    public void onImageRemoved(FileImage image) {
+        if (fragment != null)
+            fragment.onImageRemoved(image);
     }
 
     @Override
