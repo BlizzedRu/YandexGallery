@@ -32,6 +32,10 @@ public interface EndlessImageListContract extends BaseContract {
 
         void hideLoading();
 
+        void showErrorMessage();
+
+        void hideErrorMessage();
+
         void openImage(T image);
 
         void closeImage();
@@ -46,6 +50,8 @@ public interface EndlessImageListContract extends BaseContract {
         void onImageClosed(int position);
 
         void onImageClicked(T image);
+
+        void onErrorClicked();
 
         void onImagesRemoved(List<T> images);
     }

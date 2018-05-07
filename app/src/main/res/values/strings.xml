@@ -13,6 +13,9 @@
 
     <string name="full_screen_image_title">Фотография %1$d из %2$d</string>
 
+    <string name="loading_error_message">Ошибка загрузки.</string>
+    <string name="loading_error_action">Повторить?</string>
+
     <string name="image_menu_share">Поделиться</string>
     <string name="image_menu_favorite">Нравится</string>
     <string name="image_menu_delete">Удалить</string>

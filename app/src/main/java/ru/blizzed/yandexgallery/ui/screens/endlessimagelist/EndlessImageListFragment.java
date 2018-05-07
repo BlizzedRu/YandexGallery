@@ -25,6 +25,7 @@ import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialog
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
 import static android.app.Activity.RESULT_OK;
+import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListViewAdapter.FooterItemStatus;
 
 public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFragment implements EndlessImageListContract.View<T>, FullScreenImageDialogFragment.OnCloseListener {
 
@@ -64,10 +65,37 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
         unbinder = ButterKnife.bind(this, view);
 
         int spanCount = getSpanCount();
-        imagesAdapter = new EndlessImageListViewAdapter<>(spanCount, images, provideImageLoader(), (position, item) -> getPresenter().onImageClicked(item));
+        imagesAdapter = new EndlessImageListViewAdapter<T>(spanCount, images, provideImageLoader(), new EndlessImageListViewAdapter.OnClickListener<T>() {
+            @Override
+            public void onImageClick(T image) {
+                getPresenter().onImageClicked(image);
+            }
+
+            @Override
+            public void onErrorClick() {
+                getPresenter().onErrorClicked();
+            }
+        });
+
         imagesRecycler.setAdapter(imagesAdapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spanCount);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (imagesAdapter.getItemViewType(position)) {
+                    case EndlessImageListViewAdapter.IMAGE:
+                        return 1;
+                    case EndlessImageListViewAdapter.LOADING:
+                        return spanCount;
+                    case EndlessImageListViewAdapter.ERROR:
+                        return spanCount;
+                    default:
+                        return spanCount;
+                }
+            }
+        });
+
         imagesRecycler.setLayoutManager(layoutManager);
         imagesRecycler.addItemDecoration(new GridSpacingItemDecoration(spanCount, getResources().getDimensionPixelSize(R.dimen.images_preview_spacing)));
 
@@ -122,6 +150,26 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     }
 
     @Override
+    public void showErrorMessage() {
+        imagesAdapter.setFooterItemStatus(FooterItemStatus.ERROR);
+    }
+
+    @Override
+    public void hideErrorMessage() {
+        imagesAdapter.setFooterItemStatus(FooterItemStatus.EMPTY);
+    }
+
+    @Override
+    public void showLoading() {
+        imagesAdapter.setFooterItemStatus(FooterItemStatus.LOADING);
+    }
+
+    @Override
+    public void hideLoading() {
+        imagesAdapter.setFooterItemStatus(FooterItemStatus.EMPTY);
+    }
+
+    @Override
     public void scrollTo(int position) {
         imagesRecycler.scrollToPosition(position);
     }
@@ -137,16 +185,6 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     public void removeImages(List<T> images) {
         this.images.removeAll(images);
         imagesAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
     }
 
     protected abstract DialogFragment provideFullScreenDialogFragment();

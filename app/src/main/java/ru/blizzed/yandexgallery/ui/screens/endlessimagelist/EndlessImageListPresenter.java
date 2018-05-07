@@ -62,8 +62,14 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
         getViewState().removeImages(images);
     }
 
+    @Override
+    public void onErrorClicked() {
+        loadMore();
+    }
+
     private void loadMore() {
         getViewState().hideEmptyMessage();
+        getViewState().hideErrorMessage();
         getViewState().showLoading();
 
         imagesDisposable = model.getImagesObservable(imagesCount)
@@ -95,6 +101,7 @@ public class EndlessImageListPresenter<T extends Image> extends BasePresenterImp
 
     private void onErrorOccurred(Throwable error) {
         dispose();
+        getViewState().showErrorMessage();
         Logger.e(error, error.getMessage());
     }
 
