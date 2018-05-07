@@ -35,7 +35,7 @@ public class EndlessImageListViewAdapter<T extends Image> extends RecyclerView.A
     }
 
     public void setFooterItemStatus(FooterItemStatus footerItemStatus) {
-        int position = getItemCountWith(footerItemStatus);
+        /*int position = getItemCountWith(footerItemStatus) - 1;
         position = position < 0 ? 0 : position;
 
         if (this.footerItemStatus == FooterItemStatus.EMPTY) {
@@ -46,7 +46,12 @@ public class EndlessImageListViewAdapter<T extends Image> extends RecyclerView.A
             if (footerItemStatus == FooterItemStatus.EMPTY) {
                 notifyItemRemoved(position);
             } else notifyItemChanged(position);
-        }
+        }*/
+
+        // The code above produce RecyclerView's bug (Inconsistency) and strange behavior of scrolling
+        // Temporarily changed that to "hardcore" ndsc();
+
+        notifyDataSetChanged();
 
         this.footerItemStatus = footerItemStatus;
     }

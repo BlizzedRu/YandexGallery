@@ -1,7 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.endlessimagelist;
 
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,7 +23,6 @@ import ru.blizzed.yandexgallery.ui.mvp.DiMvpFragment;
 import ru.blizzed.yandexgallery.ui.screens.fullscreenimage.FullScreenImageDialogFragment;
 import ru.blizzed.yandexgallery.utils.OrientationUtils;
 
-import static android.app.Activity.RESULT_OK;
 import static ru.blizzed.yandexgallery.ui.screens.endlessimagelist.EndlessImageListViewAdapter.FooterItemStatus;
 
 public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFragment implements EndlessImageListContract.View<T>, FullScreenImageDialogFragment.OnCloseListener {
@@ -80,6 +78,7 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
         imagesRecycler.setAdapter(imagesAdapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spanCount);
+
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -209,18 +208,6 @@ public abstract class EndlessImageListFragment<T extends Image> extends DiMvpFra
     @Override
     public void onClose(DialogFragment dialog, int position) {
         getPresenter().onImageClosed(position);
-    }
-
-    /* Catching closed fullscreen image activity for scrolling to the last position */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == FULL_SCREEN_REQUEST_CODE) {
-                int position = data.getIntExtra(FullScreenImageDialogFragment.KEY_POSITION, 0);
-                scrollTo(position);
-            }
-        }
     }
 
     @Override

@@ -1,7 +1,6 @@
 package ru.blizzed.yandexgallery.ui.screens.greetings;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -63,8 +62,15 @@ public class GreetingsActivity extends AppIntro2 {
         startApp();
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
+    }
+
     private void startApp() {
-        setResult(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ? RESULT_OK : RESULT_CANCELED);
+        //setResult(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ? RESULT_OK : RESULT_CANCELED);
+        setResult(RESULT_OK);
         finish();
     }
 

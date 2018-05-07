@@ -21,14 +21,15 @@ public class SplashActivity extends Activity {
     private YoYo.YoYoString animation;
     private Disposable disposable;
 
+    private SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        SharedPreferences sp = getSharedPreferences("system", MODE_PRIVATE);
+        sp = getSharedPreferences("system", MODE_PRIVATE);
         if (!sp.contains("hasVisited")) {
-            sp.edit().putBoolean("hasVisited", true).apply();
             onFirstVisit();
         } else onVisit();
 
@@ -50,6 +51,8 @@ public class SplashActivity extends Activity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::startApp, error -> startApp());
+
+        sp.edit().putBoolean("hasVisited", true).apply();
     }
 
     @Override
@@ -58,7 +61,7 @@ public class SplashActivity extends Activity {
         if (requestCode == GreetingsActivity.REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 onVisit();
-            } else startApp();
+            } else finish();
         }
     }
 
