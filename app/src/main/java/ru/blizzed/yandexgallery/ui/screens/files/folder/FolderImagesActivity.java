@@ -2,19 +2,17 @@ package ru.blizzed.yandexgallery.ui.screens.files.folder;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 
 import ru.blizzed.yandexgallery.R;
-import ru.blizzed.yandexgallery.data.model.fileimage.FileImage;
 import ru.blizzed.yandexgallery.data.model.fileimage.FileImagesFolder;
 
-public class FolderImagesActivity extends Activity implements OnFileImageRemovedListener {
+public class FolderImagesActivity extends Activity {
 
     public static final String KEY_FOLDER = "folder";
-
-    private FileImagesFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +32,15 @@ public class FolderImagesActivity extends Activity implements OnFileImageRemoved
             actionBar.setTitle(folder.getTitle());
         }
 
-        fragment = (FileImagesFragment) getFragmentManager().findFragmentByTag(FileImagesFragment.TAG);
+        Fragment fragment = getFragmentManager().findFragmentByTag(FileImagesFragment.TAG);
         if (fragment == null) {
+            fragment = FileImagesFragment.newInstance(folder);
             getFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, FileImagesFragment.newInstance(folder), FileImagesFragment.TAG)
+                    .replace(R.id.container, fragment, FileImagesFragment.TAG)
                     .commit();
         }
 
-    }
-
-    @Override
-    public void onImageRemoved(FileImage image) {
-        if (fragment != null)
-            fragment.onImageRemoved(image);
     }
 
     @Override
