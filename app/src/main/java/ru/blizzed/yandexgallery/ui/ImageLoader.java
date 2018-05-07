@@ -55,10 +55,15 @@ public abstract class ImageLoader<T extends Image> {
         }
     };
 
+    public static void recycle(ImageView imageView) {
+        Glide.with(imageView).clear(imageView);
+        imageView.setImageDrawable(null);
+    }
+
     private static RequestOptions generateOptions(boolean usePlaceholder) {
         RequestOptions options = baseRequestOptions.clone();
         if (usePlaceholder) options = options.placeholder(R.drawable.background_placeholder);
-        return options;
+        return options.error(R.drawable.ic_no_images).fallback(R.drawable.ic_no_images);
     }
 
     public abstract void loadImage(ImageView imageView, T image, boolean usePlaceholder);

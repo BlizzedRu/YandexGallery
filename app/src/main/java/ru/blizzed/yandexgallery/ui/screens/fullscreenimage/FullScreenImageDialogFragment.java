@@ -139,8 +139,8 @@ public abstract class FullScreenImageDialogFragment<T extends Image> extends Dia
         adapter = new FullScreenImagePagerAdapter<>(images, provideImageLoader(), listener);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
-        viewPager.setOffscreenPageLimit(2);
         viewPager.addOnPageChangeListener(this);
+        viewPager.setOffscreenPageLimit(1);
 
         fillDownMenu(downMenu);
 

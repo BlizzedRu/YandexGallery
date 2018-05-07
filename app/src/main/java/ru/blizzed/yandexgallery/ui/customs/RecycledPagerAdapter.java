@@ -31,7 +31,7 @@ public abstract class RecycledPagerAdapter<VH extends RecycledPagerAdapter.ViewH
     }
 
     @Override
-    public final void destroyItem(ViewGroup container, int position, @NonNull Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView(((VH) object).itemView);
         destroyedItems.add((VH) object);
     }

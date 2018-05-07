@@ -90,6 +90,12 @@ public class FullScreenImagePagerAdapter<T extends Image> extends RecycledPagerA
         return new ViewHolder(v);
     }
 
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        ImageLoader.recycle(((ViewHolder) object).img);
+        super.destroyItem(container, position, object);
+    }
+
     public interface OnImageListener<T extends Image> {
         void onImageClicked(int position, T image);
 
